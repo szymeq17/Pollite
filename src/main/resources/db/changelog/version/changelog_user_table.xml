@@ -1,0 +1,25 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.7"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.7
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.7.xsd">
+    <changeSet author="szymeq17" id="1">
+        <createTable tableName="users">
+            <column name="id" autoIncrement="true" type="long">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="varchar(50)">
+                <constraints nullable="true" unique="true"/>
+            </column>
+            <column name="password" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <insert schemaName="public"
+                tableName="users">
+            <column name="username" value="admin" type="varchar(50)"/>
+            <column name="password" value="{noop}admin" type="varchar(200)"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
