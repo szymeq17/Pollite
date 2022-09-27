@@ -1,5 +1,12 @@
 package com.pollite.pollite.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +21,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "poll")
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +35,10 @@ public class Poll {
     @JoinColumn(name = "fk_owner")
     private User owner;
 
-    @OneToMany(mappedBy = "poll")
+    @Column(name = "text")
+    private String text;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PollAnswer> pollAnswers;
 
     @Column(name = "start_date_time")

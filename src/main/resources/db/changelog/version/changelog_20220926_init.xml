@@ -29,6 +29,7 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_poll"/>
             </column>
             <column name="fk_owner" type="BIGINT"/>
+            <column name="text" type="VARCHAR(255)"/>
             <column name="start_date_time" type="DATETIME"/>
             <column name="end_date_time" type="DATETIME"/>
         </createTable>
@@ -40,24 +41,24 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_poll_answer"/>
             </column>
-            <column name="poll_id" type="BIGINT"/>
             <column name="text" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="votes_total" type="BIGINT"/>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="poll_id" baseTableName="poll_answer" constraintName="FK_POLL_ANSWER_ON_POLL" referencedColumnNames="id" referencedTableName="poll"/>
     </changeSet>
 
     <changeSet id="4" author="Szymon Rysz">
-        <createTable tableName="poll_choice">
-            <column name="poll_answer_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_poll_choice"/>
+        <createTable tableName="poll_poll_answers">
+            <column name="poll_id" type="BIGINT">
+                <constraints nullable="false"/>
             </column>
-            <column name="voters_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_poll_choice"/>
+            <column name="poll_answers_id" type="BIGINT">
+                <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="poll_answer_id" baseTableName="poll_choice" constraintName="fk_polcho_on_poll_answer" referencedColumnNames="id" referencedTableName="poll_answer"/>
-        <addForeignKeyConstraint baseColumnNames="voters_id" baseTableName="poll_choice" constraintName="fk_polcho_on_user" referencedColumnNames="id" referencedTableName="users"/>
+        <addUniqueConstraint columnNames="poll_answers_id" constraintName="uc_poll_poll_answers_pollanswers" tableName="poll_poll_answers"/>
+        <addForeignKeyConstraint baseColumnNames="poll_id" baseTableName="poll_poll_answers" constraintName="fk_polpolans_on_poll" referencedColumnNames="id" referencedTableName="poll"/>
+        <addForeignKeyConstraint baseColumnNames="poll_answers_id" baseTableName="poll_poll_answers" constraintName="fk_polpolans_on_poll_answer" referencedColumnNames="id" referencedTableName="poll_answer"/>
     </changeSet>
 </databaseChangeLog>
