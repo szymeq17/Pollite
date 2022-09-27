@@ -1,0 +1,63 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.7"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.7
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.7.xsd">
+    <changeSet author="Szymon Rysz" id="1">
+        <createTable tableName="users">
+            <column name="id" autoIncrement="true" type="long">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="varchar(50)">
+                <constraints nullable="true" unique="true"/>
+            </column>
+            <column name="password" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <insert schemaName="public"
+                tableName="users">
+            <column name="username" value="admin" type="varchar(50)"/>
+            <column name="password" value="{noop}admin" type="varchar(200)"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="2" author="Szymon Rysz">
+        <createTable tableName="poll">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_poll"/>
+            </column>
+            <column name="fk_owner" type="BIGINT"/>
+            <column name="start_date_time" type="DATETIME"/>
+            <column name="end_date_time" type="DATETIME"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="fk_owner" baseTableName="poll" constraintName="FK_POLL_ON_FK_OWNER" referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+
+    <changeSet id="3" author="Szymon Rysz">
+        <createTable tableName="poll_answer">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_poll_answer"/>
+            </column>
+            <column name="poll_id" type="BIGINT"/>
+            <column name="text" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="poll_id" baseTableName="poll_answer" constraintName="FK_POLL_ANSWER_ON_POLL" referencedColumnNames="id" referencedTableName="poll"/>
+    </changeSet>
+
+    <changeSet id="4" author="Szymon Rysz">
+        <createTable tableName="poll_choice">
+            <column name="poll_answer_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_poll_choice"/>
+            </column>
+            <column name="voters_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_poll_choice"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="poll_answer_id" baseTableName="poll_choice" constraintName="fk_polcho_on_poll_answer" referencedColumnNames="id" referencedTableName="poll_answer"/>
+        <addForeignKeyConstraint baseColumnNames="voters_id" baseTableName="poll_choice" constraintName="fk_polcho_on_user" referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+</databaseChangeLog>
