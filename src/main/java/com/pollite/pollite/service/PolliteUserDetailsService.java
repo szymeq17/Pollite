@@ -1,7 +1,6 @@
 package com.pollite.pollite.service;
 
 import com.pollite.pollite.config.PolliteUserDetails;
-import com.pollite.pollite.model.User;
 import com.pollite.pollite.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +16,8 @@ public class PolliteUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(username);
-        }
+        var user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
         return new PolliteUserDetails(user);
     }
 }

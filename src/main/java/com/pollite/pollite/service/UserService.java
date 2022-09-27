@@ -1,5 +1,6 @@
 package com.pollite.pollite.service;
 
+import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.model.User;
 import com.pollite.pollite.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,11 @@ public class UserService {
         }
     }
 
+    public User findUserByUsername(String username) throws UserDoesNotExistException {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UserDoesNotExistException(username));
+    }
+
     private boolean userExists(String userName) {
-        return userRepository.findByUsername(userName) != null;
+        return userRepository.findByUsername(userName).isPresent();
     }
 }
