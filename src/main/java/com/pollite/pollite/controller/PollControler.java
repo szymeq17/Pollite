@@ -5,10 +5,12 @@ import com.pollite.pollite.dto.PollTemplate;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.PollDoesNotExistException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
+import com.pollite.pollite.exception.UserNotAuthorizedException;
 import com.pollite.pollite.service.PollService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,12 @@ public class PollControler {
     public void createPoll(@Valid @RequestBody PollTemplate pollTemplate, Principal principal)
             throws UserDoesNotExistException {
         pollService.addPoll(pollTemplate, principal);
+    }
+
+    @DeleteMapping("/{pollId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deletePoll(@PathVariable Long pollId, Principal principal) throws UserNotAuthorizedException, UserDoesNotExistException, PollDoesNotExistException {
+        pollService.deletePoll(pollId, principal);
     }
 
     @GetMapping("/{pollId}/results")

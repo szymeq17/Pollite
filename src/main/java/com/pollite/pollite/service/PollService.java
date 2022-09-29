@@ -6,6 +6,7 @@ import com.pollite.pollite.dto.PollTemplate;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.PollDoesNotExistException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
+import com.pollite.pollite.exception.UserNotAuthorizedException;
 import com.pollite.pollite.model.Poll;
 import com.pollite.pollite.model.PollAnswer;
 import com.pollite.pollite.repository.PollAnswerRepository;
@@ -38,6 +39,18 @@ public class PollService {
                 .endDateTime(pollTemplate.getEndDateTime())
                 .build();
         pollRepository.save(poll);
+    }
+
+    public void deletePoll(Long pollId, Principal principal) throws UserDoesNotExistException, PollDoesNotExistException, UserNotAuthorizedException {
+        var user = userService.findUserByUsername(principal.getName());
+        var poll = pollRepository.findById(pollId)
+                .orElseThrow(() -> new PollDoesNotExistException(pollId));
+
+        if (!poll.getOwner().equals(user)) {
+            throw new UserNotAuthorizedException(user.getUsername());
+        }
+
+        pollRepository.deleteById(pollId);
     }
 
     @Transactional
@@ -75,6 +88,10 @@ public class PollService {
     }
 
     private BigDecimal calculatePercentage(Long pollAnswerVotesTotal, Long pollVotesTotal) {
+        if (pollVotesTotal == 0L) {
+            return BigDecimal.ZERO;
+        }
+
         return BigDecimal.valueOf(pollAnswerVotesTotal)
                 .divide(
                         BigDecimal.valueOf(pollVotesTotal),
