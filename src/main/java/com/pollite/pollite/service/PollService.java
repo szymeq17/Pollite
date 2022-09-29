@@ -13,6 +13,7 @@ import com.pollite.pollite.repository.PollRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -39,12 +40,12 @@ public class PollService {
         pollRepository.save(poll);
     }
 
-    public void vote(Long pollAnswerId) throws PollAnswerDoesNotExistException, UserDoesNotExistException {
-        var pollAnswer = pollAnswerRepository.findById(pollAnswerId)
-                .orElseThrow(() -> new PollAnswerDoesNotExistException(pollAnswerId));
-
-        pollAnswer.addVote();
-        pollAnswerRepository.save(pollAnswer);
+    @Transactional
+    public void vote(Long pollAnswerId) throws PollAnswerDoesNotExistException {
+        if (!pollAnswerRepository.existsById(pollAnswerId)) {
+            throw new PollAnswerDoesNotExistException(pollAnswerId);
+        }
+        pollAnswerRepository.incrementVotes(pollAnswerId);
     }
 
     public PollResults getPollResults(Long pollId) throws PollDoesNotExistException {

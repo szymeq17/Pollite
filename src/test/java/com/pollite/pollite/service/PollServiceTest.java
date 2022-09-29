@@ -1,6 +1,7 @@
 package com.pollite.pollite.service;
 
 import com.pollite.pollite.dto.PollTemplate;
+import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.model.Poll;
 import com.pollite.pollite.model.PollAnswer;
@@ -17,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,9 +50,6 @@ class PollServiceTest {
 
     @Captor
     private ArgumentCaptor<Poll> pollCaptor;
-
-    @Captor
-    private ArgumentCaptor<PollAnswer> pollAnswerCaptor;
 
     @Test
     public void shouldAddPoll() throws Exception {
@@ -95,27 +92,30 @@ class PollServiceTest {
                 .thenThrow(new UserDoesNotExistException(EXAMPLE_USERNAME));
 
         //then
-        Throwable throwable  = assertThrows(UserDoesNotExistException.class,
-                () -> sut.addPoll(pollTemplate, principal));
+        assertThrows(UserDoesNotExistException.class, () -> sut.addPoll(pollTemplate, principal));
     }
 
     @Test
-    public void pollShoudHaveOneMoreVote() throws Exception {
+    public void pollAnswerVotesTotalShouldBeIncrementedWhenVoted() throws Exception {
         //given
         var id = 1L;
-        var initialVotesTotal = 0L;
-        var pollAnswer = PollAnswer.builder().text(EXAMPLE_TEXT).votesTotal(initialVotesTotal).build();
-
-        when(pollAnswerRepository.findById(id)).thenReturn(Optional.of(pollAnswer));
+        when(pollAnswerRepository.existsById(id)).thenReturn(true);
 
         //when
         sut.vote(id);
 
         //then
-        verify(pollAnswerRepository).save(pollAnswerCaptor.capture());
-        var savedPollAnswer = pollAnswerCaptor.getValue();
+        verify(pollAnswerRepository).incrementVotes(id);
+    }
 
-        assertThat(savedPollAnswer.getVotesTotal()).isEqualTo(initialVotesTotal + 1);
+    @Test
+    public void shouldThrowExceptionWhenPollAnswerDoesNotExist() {
+        //given
+        var id = 1L;
+        when(pollAnswerRepository.existsById(id)).thenReturn(false);
+
+        //then
+        assertThrows(PollAnswerDoesNotExistException.class, () -> sut.vote(id));
     }
 
     private Poll createPoll(String text, List<String> answers, User owner) {
