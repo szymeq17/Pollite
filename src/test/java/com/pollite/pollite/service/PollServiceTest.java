@@ -4,6 +4,7 @@ import com.pollite.pollite.dto.PollTemplate;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.PollDoesNotExistException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
+import com.pollite.pollite.exception.UserNotAuthorizedException;
 import com.pollite.pollite.model.Poll;
 import com.pollite.pollite.model.PollAnswer;
 import com.pollite.pollite.model.User;
@@ -21,7 +22,6 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -207,20 +207,38 @@ class PollServiceTest {
         assertThrows(PollDoesNotExistException.class, () -> sut.getPollResults(id));
     }
 
-    private Poll createPoll(String text, List<String> answers, User owner) {
-        return Poll.builder()
-                .text(text)
-                .pollAnswers(
-                        answers.stream()
-                                .map(
-                                        answer -> PollAnswer.builder()
-                                                .text(answer)
-                                                .votesTotal(0L).build()
-                                )
-                                .collect(Collectors.toList())
-                )
-                .owner(owner)
-                .build();
+    @Test
+    public void shouldDeletePoll() throws Exception {
+        //given
+        var id = 1L;
+        var user = createUser(EXAMPLE_USERNAME);
+        var poll = Poll.builder().owner(user).build();
+
+        when(principal.getName()).thenReturn(EXAMPLE_USERNAME);
+        when(userService.findUserByUsername(EXAMPLE_USERNAME)).thenReturn(user);
+        when(pollRepository.findById(id)).thenReturn(Optional.of(poll));
+
+        //when
+        sut.deletePoll(id, principal);
+
+        //then
+        verify(pollRepository).deleteById(id);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenUserTriesToDeleteNotHisPoll() throws Exception {
+        //given
+        var id = 1L;
+        var user = createUser(EXAMPLE_USERNAME);
+        var owner = createUser("owner");
+        var poll = Poll.builder().owner(owner).build();
+
+        when(principal.getName()).thenReturn(EXAMPLE_USERNAME);
+        when(userService.findUserByUsername(EXAMPLE_USERNAME)).thenReturn(user);
+        when(pollRepository.findById(id)).thenReturn(Optional.of(poll));
+
+        //then
+        assertThrows(UserNotAuthorizedException.class, () -> sut.deletePoll(id, principal));
     }
 
     private PollAnswer createPollAnswer(String text, Long votesTotal) {
