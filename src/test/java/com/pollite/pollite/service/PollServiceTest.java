@@ -1,6 +1,9 @@
 package com.pollite.pollite.service;
 
-import com.pollite.pollite.dto.PollTemplate;
+import com.pollite.pollite.dto.PollAnswerDto;
+import com.pollite.pollite.dto.PollDto;
+import com.pollite.pollite.dto.mapper.PollAnswerMapper;
+import com.pollite.pollite.dto.mapper.PollMapper;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.PollDoesNotExistException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
@@ -17,11 +20,11 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,6 +52,9 @@ class PollServiceTest {
     private UserService userService;
 
     @Mock
+    private PollMapper pollMapper;
+
+    @Mock
     private Principal principal;
 
     @Captor
@@ -57,19 +63,25 @@ class PollServiceTest {
     @Test
     public void shouldAddPoll() throws Exception {
         //given
-        var pollTemplate = PollTemplate.builder()
+        var pollDTO  = PollDto.builder()
                 .text(EXAMPLE_TEXT)
-                .answers(EXAMPLE_ANSWERS)
+                .pollAnswers(createPollAnswerDtoList(EXAMPLE_ANSWERS))
                 .build();
 
         var user = createUser(EXAMPLE_USERNAME);
 
-        when(principal.getName()).thenReturn(EXAMPLE_USERNAME);
+        var poll = Poll.builder()
+                .text(EXAMPLE_TEXT)
+                .pollAnswers(createPollAnswerList(EXAMPLE_ANSWERS))
+                .owner(user)
+                .build();
 
+        when(principal.getName()).thenReturn(EXAMPLE_USERNAME);
+        when(pollMapper.fromDto(pollDTO)).thenReturn(poll);
         when(userService.findUserByUsername(EXAMPLE_USERNAME)).thenReturn(user);
 
         //when
-        sut.addPoll(pollTemplate, principal);
+        sut.addPoll(pollDTO, principal);
 
         //then
         verify(pollRepository).save(pollCaptor.capture());
@@ -84,9 +96,9 @@ class PollServiceTest {
     @Test
     public void shouldThrowExceptionWhenUserDoesNotExist() throws Exception {
         //given
-        var pollTemplate = PollTemplate.builder()
+        var pollDTO  = PollDto.builder()
                 .text(EXAMPLE_TEXT)
-                .answers(EXAMPLE_ANSWERS)
+                .pollAnswers(createPollAnswerDtoList(EXAMPLE_ANSWERS))
                 .build();
 
         when(principal.getName()).thenReturn(EXAMPLE_USERNAME);
@@ -95,7 +107,7 @@ class PollServiceTest {
                 .thenThrow(new UserDoesNotExistException(EXAMPLE_USERNAME));
 
         //then
-        assertThrows(UserDoesNotExistException.class, () -> sut.addPoll(pollTemplate, principal));
+        assertThrows(UserDoesNotExistException.class, () -> sut.addPoll(pollDTO, principal));
     }
 
     @Test
@@ -241,6 +253,23 @@ class PollServiceTest {
         assertThrows(UserNotAuthorizedException.class, () -> sut.deletePoll(id, principal));
     }
 
+    private List<PollAnswerDto> createPollAnswerDtoList(List<String> answers) {
+        return answers.stream()
+                .map(this::createPollAnswerDto)
+                .collect(Collectors.toList());
+    }
+
+    private List<PollAnswer> createPollAnswerList(List<String> answers) {
+        return answers.stream()
+                .map(answer -> createPollAnswer(answer, 0L))
+                .collect(Collectors.toList());
+    }
+
+    private PollAnswerDto createPollAnswerDto(String answer) {
+        return PollAnswerDto.builder()
+                .text(answer)
+                .build();
+    }
     private PollAnswer createPollAnswer(String text, Long votesTotal) {
         return PollAnswer.builder()
                 .text(text)

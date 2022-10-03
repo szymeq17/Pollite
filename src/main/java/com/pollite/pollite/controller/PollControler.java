@@ -1,7 +1,7 @@
 package com.pollite.pollite.controller;
 
+import com.pollite.pollite.dto.PollDto;
 import com.pollite.pollite.dto.PollResults;
-import com.pollite.pollite.dto.PollTemplate;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.PollDoesNotExistException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
@@ -30,9 +30,9 @@ public class PollControler {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void createPoll(@Valid @RequestBody PollTemplate pollTemplate, Principal principal)
+    public void createPoll(@Valid @RequestBody PollDto pollDTO, Principal principal)
             throws UserDoesNotExistException {
-        pollService.addPoll(pollTemplate, principal);
+        pollService.addPoll(pollDTO, principal);
     }
 
     @DeleteMapping("/{pollId}")

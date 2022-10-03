@@ -30,8 +30,4 @@ public class PollAnswer {
     private String text;
 
     private Long votesTotal;
-
-    public void addVote() {
-        votesTotal++;
-    }
 }

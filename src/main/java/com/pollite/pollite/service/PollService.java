@@ -1,13 +1,14 @@
 package com.pollite.pollite.service;
 
 import com.pollite.pollite.dto.PollAnswerResult;
+import com.pollite.pollite.dto.PollDto;
 import com.pollite.pollite.dto.PollResults;
-import com.pollite.pollite.dto.PollTemplate;
+import com.pollite.pollite.dto.mapper.PollAnswerMapper;
+import com.pollite.pollite.dto.mapper.PollMapper;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.PollDoesNotExistException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.exception.UserNotAuthorizedException;
-import com.pollite.pollite.model.Poll;
 import com.pollite.pollite.model.PollAnswer;
 import com.pollite.pollite.repository.PollAnswerRepository;
 import com.pollite.pollite.repository.PollRepository;
@@ -29,15 +30,14 @@ public class PollService {
     private final PollAnswerRepository pollAnswerRepository;
     private final UserService userService;
 
-    public void addPoll(PollTemplate pollTemplate, Principal principal) throws UserDoesNotExistException {
+    private final PollMapper pollMapper;
+
+    private final PollAnswerMapper pollAnswerMapper;
+
+    public void addPoll(PollDto pollDTO, Principal principal) throws UserDoesNotExistException {
         var owner = userService.findUserByUsername(principal.getName());
-        var poll = Poll.builder()
-                .owner(owner)
-                .text(pollTemplate.getText())
-                .pollAnswers(createPollAnswers(pollTemplate.getAnswers()))
-                .startDateTime(pollTemplate.getStartDateTime())
-                .endDateTime(pollTemplate.getEndDateTime())
-                .build();
+        var poll = pollMapper.fromDto(pollDTO);
+        poll.setOwner(owner);
         pollRepository.save(poll);
     }
 
