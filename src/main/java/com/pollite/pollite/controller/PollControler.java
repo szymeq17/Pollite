@@ -4,6 +4,7 @@ import com.pollite.pollite.dto.PollDto;
 import com.pollite.pollite.dto.PollResults;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.PollDoesNotExistException;
+import com.pollite.pollite.exception.PollNotActiveException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.exception.UserNotAuthorizedException;
 import com.pollite.pollite.service.PollService;
@@ -35,6 +36,13 @@ public class PollControler {
         pollService.addPoll(pollDTO, principal);
     }
 
+    @GetMapping("/{pollId}")
+    public ResponseEntity<PollDto> getPoll(@PathVariable Long pollId) {
+        return pollService.findPoll(pollId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{pollId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deletePoll(@PathVariable Long pollId, Principal principal) throws UserNotAuthorizedException, UserDoesNotExistException, PollDoesNotExistException {
@@ -47,9 +55,9 @@ public class PollControler {
         return ResponseEntity.ok(pollResults);
     }
 
-    @PostMapping("/vote/{pollAnswerId}")
+    @PostMapping("/{pollId}/vote/{pollAnswerId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void vote(@PathVariable Long pollAnswerId) throws PollAnswerDoesNotExistException, UserDoesNotExistException {
-        pollService.vote(pollAnswerId);
+    public void vote(@PathVariable Long pollId, @PathVariable Long pollAnswerId) throws PollAnswerDoesNotExistException, PollNotActiveException, PollDoesNotExistException {
+        pollService.vote(pollId, pollAnswerId);
     }
 }

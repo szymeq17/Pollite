@@ -3,12 +3,13 @@ package com.pollite.pollite.service;
 import com.pollite.pollite.dto.PollAnswerResult;
 import com.pollite.pollite.dto.PollDto;
 import com.pollite.pollite.dto.PollResults;
-import com.pollite.pollite.dto.mapper.PollAnswerMapper;
 import com.pollite.pollite.dto.mapper.PollMapper;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.PollDoesNotExistException;
+import com.pollite.pollite.exception.PollNotActiveException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.exception.UserNotAuthorizedException;
+import com.pollite.pollite.model.Poll;
 import com.pollite.pollite.model.PollAnswer;
 import com.pollite.pollite.repository.PollAnswerRepository;
 import com.pollite.pollite.repository.PollRepository;
@@ -20,7 +21,10 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.security.Principal;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -32,13 +36,17 @@ public class PollService {
 
     private final PollMapper pollMapper;
 
-    private final PollAnswerMapper pollAnswerMapper;
+    private final Clock clock;
 
     public void addPoll(PollDto pollDTO, Principal principal) throws UserDoesNotExistException {
         var owner = userService.findUserByUsername(principal.getName());
         var poll = pollMapper.fromDto(pollDTO);
         poll.setOwner(owner);
         pollRepository.save(poll);
+    }
+
+    public Optional<PollDto> findPoll(Long id) {
+        return pollRepository.findById(id).map(pollMapper::toDto);
     }
 
     public void deletePoll(Long pollId, Principal principal) throws UserDoesNotExistException, PollDoesNotExistException, UserNotAuthorizedException {
@@ -54,10 +62,18 @@ public class PollService {
     }
 
     @Transactional
-    public void vote(Long pollAnswerId) throws PollAnswerDoesNotExistException {
+    public void vote(Long pollId, Long pollAnswerId)
+            throws PollAnswerDoesNotExistException, PollNotActiveException, PollDoesNotExistException {
+        var poll = pollRepository.findById(pollId).orElseThrow(() -> new PollDoesNotExistException(pollId));
+
+        if (!isPollActive(poll)) {
+            throw new PollNotActiveException(poll.getId());
+        }
+
         if (!pollAnswerRepository.existsById(pollAnswerId)) {
             throw new PollAnswerDoesNotExistException(pollAnswerId);
         }
+
         pollAnswerRepository.incrementVotes(pollAnswerId);
     }
 
@@ -100,12 +116,14 @@ public class PollService {
                 .scaleByPowerOfTen(2);
     }
 
-    private List<PollAnswer> createPollAnswers(List<String> answers) {
-        return answers.stream()
-                .map(answer -> PollAnswer.builder()
-                        .text(answer)
-                        .votesTotal(0L)
-                        .build())
-                .collect(Collectors.toList());
+    private boolean isPollActive(Poll poll) {
+        var now = LocalDateTime.now(clock);
+        var pollStartDate = poll.getStartDateTime();
+        var pollEndDate = poll.getEndDateTime();
+
+        var isAfterStartDate = pollStartDate == null || now.compareTo(pollStartDate) >= 0;
+        var isBeforeEndDate = pollEndDate == null || now.compareTo(pollEndDate) <= 0;
+
+        return isAfterStartDate && isBeforeEndDate;
     }
 }

@@ -2,7 +2,6 @@ package com.pollite.pollite.service;
 
 import com.pollite.pollite.dto.PollAnswerDto;
 import com.pollite.pollite.dto.PollDto;
-import com.pollite.pollite.dto.mapper.PollAnswerMapper;
 import com.pollite.pollite.dto.mapper.PollMapper;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.PollDoesNotExistException;
@@ -13,15 +12,22 @@ import com.pollite.pollite.model.PollAnswer;
 import com.pollite.pollite.model.User;
 import com.pollite.pollite.repository.PollAnswerRepository;
 import com.pollite.pollite.repository.PollRepository;
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +44,9 @@ class PollServiceTest {
     private static final String EXAMPLE_TEXT = "Example text";
     private static final List<String> EXAMPLE_ANSWERS = List.of("Answer 1", "Answer 3", "Answer 2");
     private static final String EXAMPLE_USERNAME = "user";
+
+    private static final LocalDateTime BASE_DATE_TIME = LocalDateTime.of(
+            2022, 6, 1, 12, 0, 0);
 
     @InjectMocks
     private PollService sut;
@@ -56,6 +65,9 @@ class PollServiceTest {
 
     @Mock
     private Principal principal;
+
+    @Mock
+    private Clock clock;
 
     @Captor
     private ArgumentCaptor<Poll> pollCaptor;
@@ -113,24 +125,41 @@ class PollServiceTest {
     @Test
     public void pollAnswerVotesTotalShouldBeIncrementedWhenVoted() throws Exception {
         //given
-        var id = 1L;
-        when(pollAnswerRepository.existsById(id)).thenReturn(true);
+        var pollId = 1L;
+        var pollAnswerId = 2L;
+
+        var pollAnswer = createPollAnswer("text", 0L);
+        var poll = Poll.builder()
+                .pollAnswers(List.of(pollAnswer))
+                .startDateTime(BASE_DATE_TIME.minusDays(1))
+                .endDateTime(BASE_DATE_TIME.plusDays(1))
+                .build();
+
+        when(clock.instant()).thenReturn(BASE_DATE_TIME.atZone(ZoneId.systemDefault()).toInstant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+        when(pollRepository.findById(pollId)).thenReturn(Optional.of(poll));
+        when(pollAnswerRepository.existsById(pollAnswerId)).thenReturn(true);
 
         //when
-        sut.vote(id);
+        sut.vote(pollId, pollAnswerId);
 
         //then
-        verify(pollAnswerRepository).incrementVotes(id);
+        verify(pollAnswerRepository).incrementVotes(pollAnswerId);
     }
 
     @Test
     public void shouldThrowExceptionWhenPollAnswerDoesNotExist() {
         //given
-        var id = 1L;
-        when(pollAnswerRepository.existsById(id)).thenReturn(false);
+        var pollId = 1L;
+        var pollAnswerId = 2L;
+
+        when(pollRepository.findById(pollId)).thenReturn(Optional.of(Poll.builder().build()));
+        when(pollAnswerRepository.existsById(pollAnswerId)).thenReturn(false);
+        when(clock.instant()).thenReturn(BASE_DATE_TIME.atZone(ZoneId.systemDefault()).toInstant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
         //then
-        assertThrows(PollAnswerDoesNotExistException.class, () -> sut.vote(id));
+        assertThrows(PollAnswerDoesNotExistException.class, () -> sut.vote(pollId, pollAnswerId));
     }
 
     @Test
