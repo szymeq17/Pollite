@@ -30,8 +30,8 @@
             </column>
             <column name="fk_owner" type="BIGINT"/>
             <column name="text" type="VARCHAR(255)"/>
-            <column name="start_date_time" type="DATETIME"/>
-            <column name="end_date_time" type="DATETIME"/>
+            <column name="start_date_time" type="timestamp with time zone"/>
+            <column name="end_date_time" type="timestamp with time zone"/>
         </createTable>
         <addForeignKeyConstraint baseColumnNames="fk_owner" baseTableName="poll" constraintName="FK_POLL_ON_FK_OWNER" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>

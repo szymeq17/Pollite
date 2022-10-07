@@ -23,6 +23,7 @@ import java.math.RoundingMode;
 import java.security.Principal;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -117,7 +118,7 @@ public class PollService {
     }
 
     private boolean isPollActive(Poll poll) {
-        var now = LocalDateTime.now(clock);
+        var now = OffsetDateTime.now(clock);
         var pollStartDate = poll.getStartDateTime();
         var pollEndDate = poll.getEndDateTime();
 

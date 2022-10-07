@@ -12,22 +12,20 @@ import com.pollite.pollite.model.PollAnswer;
 import com.pollite.pollite.model.User;
 import com.pollite.pollite.repository.PollAnswerRepository;
 import com.pollite.pollite.repository.PollRepository;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.Clock;
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,8 +43,8 @@ class PollServiceTest {
     private static final List<String> EXAMPLE_ANSWERS = List.of("Answer 1", "Answer 3", "Answer 2");
     private static final String EXAMPLE_USERNAME = "user";
 
-    private static final LocalDateTime BASE_DATE_TIME = LocalDateTime.of(
-            2022, 6, 1, 12, 0, 0);
+    private static final OffsetDateTime BASE_DATE_TIME = OffsetDateTime.of(LocalDateTime.of(
+            2022, 6, 1, 12, 0, 0), ZoneOffset.ofHours(2));
 
     @InjectMocks
     private PollService sut;
@@ -135,7 +133,7 @@ class PollServiceTest {
                 .endDateTime(BASE_DATE_TIME.plusDays(1))
                 .build();
 
-        when(clock.instant()).thenReturn(BASE_DATE_TIME.atZone(ZoneId.systemDefault()).toInstant());
+        when(clock.instant()).thenReturn(BASE_DATE_TIME.toInstant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
         when(pollRepository.findById(pollId)).thenReturn(Optional.of(poll));
         when(pollAnswerRepository.existsById(pollAnswerId)).thenReturn(true);
@@ -155,7 +153,7 @@ class PollServiceTest {
 
         when(pollRepository.findById(pollId)).thenReturn(Optional.of(Poll.builder().build()));
         when(pollAnswerRepository.existsById(pollAnswerId)).thenReturn(false);
-        when(clock.instant()).thenReturn(BASE_DATE_TIME.atZone(ZoneId.systemDefault()).toInstant());
+        when(clock.instant()).thenReturn(BASE_DATE_TIME.toInstant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
         //then

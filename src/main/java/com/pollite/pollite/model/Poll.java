@@ -16,7 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
@@ -42,8 +42,8 @@ public class Poll {
     private List<PollAnswer> pollAnswers;
 
     @Column(name = "start_date_time")
-    private LocalDateTime startDateTime;
+    private OffsetDateTime startDateTime;
 
     @Column(name = "end_date_time")
-    private LocalDateTime endDateTime;
+    private OffsetDateTime endDateTime;
 }

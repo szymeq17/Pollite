@@ -3,7 +3,7 @@ package com.pollite.pollite.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
@@ -13,6 +13,6 @@ public class PollDto {
     private String ownerUsername;
     private String text;
     private List<PollAnswerDto> pollAnswers;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private OffsetDateTime startDateTime;
+    private OffsetDateTime endDateTime;
 }

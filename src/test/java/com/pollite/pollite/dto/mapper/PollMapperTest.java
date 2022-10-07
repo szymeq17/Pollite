@@ -12,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,8 +23,8 @@ import static org.mockito.Mockito.when;
 class PollMapperTest {
 
     private static final String POLL_TEXT = "Example poll text";
-    private static final LocalDateTime POLL_START_DATE = LocalDateTime.of(2022, 1, 6, 12, 0, 0);
-    private static final LocalDateTime POLL_END_DATE = POLL_START_DATE.plusDays(10);
+    private static final OffsetDateTime POLL_START_DATE = OffsetDateTime.of(LocalDateTime.of(2022, 1, 6, 12, 0, 0), ZoneOffset.ofHours(2));
+    private static final OffsetDateTime POLL_END_DATE = POLL_START_DATE.plusDays(10);
     private static final Long POLL_ID = 1L;
     private static final String USERNAME = "username";
 
