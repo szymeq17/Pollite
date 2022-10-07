@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -47,6 +48,12 @@ public class PollControler {
     @ResponseStatus(value = HttpStatus.OK)
     public void deletePoll(@PathVariable Long pollId, Principal principal) throws UserNotAuthorizedException, UserDoesNotExistException, PollDoesNotExistException {
         pollService.deletePoll(pollId, principal);
+    }
+
+    @PutMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public void editPoll(@RequestBody PollDto pollDto, Principal principal) throws UserDoesNotExistException, UserNotAuthorizedException {
+        pollService.editPoll(pollDto, principal);
     }
 
     @GetMapping("/{pollId}/results")

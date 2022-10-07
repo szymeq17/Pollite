@@ -62,6 +62,18 @@ public class PollService {
         pollRepository.deleteById(pollId);
     }
 
+    public void editPoll(PollDto pollDto, Principal principal) throws UserDoesNotExistException, UserNotAuthorizedException {
+        var user = userService.findUserByUsername(principal.getName());
+
+        var poll = pollMapper.fromDto(pollDto);
+
+        if (!poll.getOwner().equals(user)) {
+            throw new UserNotAuthorizedException(user.getUsername());
+        }
+
+        pollRepository.save(poll);
+    }
+
     @Transactional
     public void vote(Long pollId, Long pollAnswerId)
             throws PollAnswerDoesNotExistException, PollNotActiveException, PollDoesNotExistException {
