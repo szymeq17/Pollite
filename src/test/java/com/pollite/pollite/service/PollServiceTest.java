@@ -12,6 +12,8 @@ import com.pollite.pollite.model.PollAnswer;
 import com.pollite.pollite.model.User;
 import com.pollite.pollite.repository.PollAnswerRepository;
 import com.pollite.pollite.repository.PollRepository;
+import com.pollite.pollite.service.poll.PollService;
+import com.pollite.pollite.service.poll.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

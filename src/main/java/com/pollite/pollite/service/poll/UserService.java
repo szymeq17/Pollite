@@ -1,4 +1,4 @@
-package com.pollite.pollite.service;
+package com.pollite.pollite.service.poll;
 
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.model.User;

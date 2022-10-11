@@ -1,7 +1,6 @@
 package com.pollite.pollite.controller;
 
-import com.pollite.pollite.config.PolliteUserDetails;
-import com.pollite.pollite.service.UserService;
+import com.pollite.pollite.service.poll.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

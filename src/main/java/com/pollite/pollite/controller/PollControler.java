@@ -7,7 +7,7 @@ import com.pollite.pollite.exception.PollDoesNotExistException;
 import com.pollite.pollite.exception.PollNotActiveException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.exception.UserNotAuthorizedException;
-import com.pollite.pollite.service.PollService;
+import com.pollite.pollite.service.poll.PollService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
