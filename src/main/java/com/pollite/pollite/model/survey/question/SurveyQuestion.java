@@ -1,21 +1,23 @@
 package com.pollite.pollite.model.survey.question;
 
-import com.pollite.pollite.model.survey.SurveyConfiguration;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToOne;
 
 @Entity
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class SurveyQuestion {
 
@@ -25,5 +27,6 @@ public abstract class SurveyQuestion {
 
     private String text;
 
+    @Column(name = "question_order")
     private Integer order;
 }

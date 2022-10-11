@@ -2,10 +2,10 @@ package com.pollite.pollite.model.survey.question;
 
 import com.pollite.pollite.model.survey.answer.SurveyQuestionAnswer;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "survey_multi_choice_question")
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 @AllArgsConstructor

@@ -28,7 +28,7 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_surveyquestion"/>
             </column>
             <column name="text" type="VARCHAR(255)"/>
-            <column name="order" type="INT"/>
+            <column name="question_order" type="INT"/>
         </createTable>
 
         <createTable tableName="survey_question_answer">
