@@ -14,6 +14,5 @@ public interface SurveyMapper {
     @Mapping(source = "owner.username", target = "ownerUsername")
     SurveyDto toDto(Survey survey);
 
-    @Mapping(source = "questions", target = "questions", qualifiedByName = "surveyQuestion")
     Survey fromDto(SurveyDto surveyDto);
 }

@@ -10,9 +10,9 @@ import java.util.List;
 @Builder
 public class SurveyQuestionDto {
 
-    private SurveyQuestionType type;
-
     private Long id;
+
+    private SurveyQuestionType type;
 
     private String text;
 
