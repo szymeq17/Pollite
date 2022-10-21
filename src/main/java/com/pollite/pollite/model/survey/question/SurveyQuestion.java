@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class SurveyQuestion {
     @Column(name = "question_order")
     private Integer order;
 
+    @OrderBy("order ASC")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SurveyQuestionAnswer> answers = new ArrayList<>();
 }

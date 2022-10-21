@@ -10,4 +10,6 @@ public class SurveyQuestionAnswerDto {
     private Long id;
 
     private String text;
+
+    private Integer order;
 }

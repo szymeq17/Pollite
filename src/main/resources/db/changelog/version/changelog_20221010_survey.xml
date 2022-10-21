@@ -37,6 +37,7 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_survey_question_answer"/>
             </column>
             <column name="text" type="VARCHAR(255)"/>
+            <column name="answer_order" type="INT"/>
         </createTable>
 
         <createTable tableName="survey_question_answers">
