@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class Survey {
     @JoinColumn(name = "fk_owner")
     private User owner;
 
+    @OrderBy("order ASC")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SurveyQuestion> questions = new ArrayList<>();
 
