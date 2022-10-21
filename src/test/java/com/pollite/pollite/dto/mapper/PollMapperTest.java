@@ -108,20 +108,6 @@ class PollMapperTest {
         assertThat(result.getPollAnswers()).containsAll(List.of(pollAnswerDto1, pollAnswerDto2, pollAnswerDto3));
     }
 
-    private PollDto createPollDto() {
-        return PollDto.builder()
-                .id(1L)
-                .text(POLL_TEXT)
-                .startDateTime(POLL_START_DATE)
-                .endDateTime(POLL_END_DATE)
-                .pollAnswers(List.of(
-                        createPollAnswerDto(1L, "Answer 1"),
-                        createPollAnswerDto(2L, "Answer 2"),
-                        createPollAnswerDto(3L, "Answer 3")
-                ))
-                .build();
-    }
-
     private PollAnswerDto createPollAnswerDto(Long id, String text) {
         return PollAnswerDto.builder().text(text).id(id).build();
     }
