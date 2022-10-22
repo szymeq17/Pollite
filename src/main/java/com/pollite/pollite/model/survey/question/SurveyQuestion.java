@@ -45,4 +45,11 @@ public class SurveyQuestion {
     @OrderBy("order ASC")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SurveyQuestionAnswer> answers = new ArrayList<>();
+
+    public SurveyQuestionAnswer getAnswerByOrder(int order) {
+        return answers.stream()
+                .filter(surveyQuestionAnswer -> surveyQuestionAnswer.getOrder() == order)
+                .findFirst()
+                .orElse(null);
+    }
 }

@@ -44,5 +44,12 @@ public class Survey {
 
     @OneToOne(cascade = CascadeType.ALL)
     private SurveyConfiguration configuration;
+
+    public SurveyQuestion getQuestionByOrder(int order) {
+        return questions.stream()
+                .filter(surveyQuestion -> surveyQuestion.getOrder() == order)
+                .findFirst()
+                .orElse(null);
+    }
 }
 
