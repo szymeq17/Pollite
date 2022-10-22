@@ -90,5 +90,26 @@
         <addUniqueConstraint columnNames="completed_questions_id" constraintName="uc_completed_survey_completed_questions_completedquestions" tableName="completed_survey_completed_questions"/>
         <addForeignKeyConstraint baseColumnNames="completed_questions_id" baseTableName="completed_survey_completed_questions" constraintName="fk_comsurcomque_on_completed_question" referencedColumnNames="id" referencedTableName="completed_question"/>
         <addForeignKeyConstraint baseColumnNames="completed_survey_id" baseTableName="completed_survey_completed_questions" constraintName="fk_comsurcomque_on_completed_survey" referencedColumnNames="id" referencedTableName="completed_survey"/>
+
+        <createTable tableName="survey_question_exclusion">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_survey_question_exclusion"/>
+            </column>
+            <column name="question_order" type="BIGINT"/>
+            <column name="answer_order" type="BIGINT"/>
+            <column name="excluded_question_order" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="survey_configuration_exclusions">
+            <column name="survey_configuration_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="exclusions_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="exclusions_id" constraintName="uc_survey_configuration_exclusions_exclusions" tableName="survey_configuration_exclusions"/>
+        <addForeignKeyConstraint baseColumnNames="survey_configuration_id" baseTableName="survey_configuration_exclusions" constraintName="fk_surconexc_on_survey_configuration" referencedColumnNames="id" referencedTableName="survey_configuration"/>
+        <addForeignKeyConstraint baseColumnNames="exclusions_id" baseTableName="survey_configuration_exclusions" constraintName="fk_surconexc_on_survey_question_exclusion" referencedColumnNames="id" referencedTableName="survey_question_exclusion"/>
     </changeSet>
 </databaseChangeLog>
