@@ -25,9 +25,9 @@ public class SurveyQuestionExclusion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long questionOrder;
+    private Integer questionOrder;
 
-    private Long answerOrder;
+    private Integer answerOrder;
 
-    private Long excludedQuestionOrder;
+    private Integer excludedQuestionOrder;
 }
