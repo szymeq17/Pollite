@@ -3,6 +3,7 @@ package com.pollite.pollite.validator;
 import com.pollite.pollite.dto.CompletedSurveyDto;
 import com.pollite.pollite.dto.CompletedSurveyQuestionDto;
 import com.pollite.pollite.exception.InvalidCompletedSurveyException;
+import com.pollite.pollite.exception.SurveyDoesNotExistException;
 import com.pollite.pollite.exception.SurveyNotActiveException;
 import com.pollite.pollite.model.survey.Survey;
 import com.pollite.pollite.model.survey.SurveyConfiguration;
@@ -240,6 +241,17 @@ class CompletedSurveyValidatorTest {
 
         //then
         assertThrows(InvalidCompletedSurveyException.class, () -> sut.validate(completedSurveyDto));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenSurveyDoesNotExist() {
+        //given
+        var completedSurveyDto = CompletedSurveyDto.builder().surveyId(1L).build();
+
+        when(surveyRepository.findById(1L)).thenReturn(Optional.empty());
+
+        //then
+        assertThrows(SurveyDoesNotExistException.class, () -> sut.validate(completedSurveyDto));
     }
 
 }

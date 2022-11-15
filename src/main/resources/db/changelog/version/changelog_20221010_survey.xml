@@ -77,7 +77,9 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_completed_survey"/>
             </column>
+            <column name="survey_id" type="BIGINT"/>
         </createTable>
+        <addForeignKeyConstraint baseColumnNames="survey_id" baseTableName="completed_survey" constraintName="FK_COMPLETED_SURVEY_ON_SURVEY" referencedColumnNames="id" referencedTableName="survey"/>
 
         <createTable tableName="completed_survey_completed_questions">
             <column name="completed_survey_id" type="BIGINT">
@@ -90,6 +92,17 @@
         <addUniqueConstraint columnNames="completed_questions_id" constraintName="uc_completed_survey_completed_questions_completedquestions" tableName="completed_survey_completed_questions"/>
         <addForeignKeyConstraint baseColumnNames="completed_questions_id" baseTableName="completed_survey_completed_questions" constraintName="fk_comsurcomque_on_completed_question" referencedColumnNames="id" referencedTableName="completed_question"/>
         <addForeignKeyConstraint baseColumnNames="completed_survey_id" baseTableName="completed_survey_completed_questions" constraintName="fk_comsurcomque_on_completed_survey" referencedColumnNames="id" referencedTableName="completed_survey"/>
+
+        <createTable tableName="completed_question_answers">
+            <column name="completed_question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answers_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="completed_question_id" baseTableName="completed_question_answers" constraintName="fk_comqueans_on_completed_question" referencedColumnNames="id" referencedTableName="completed_question"/>
+        <addForeignKeyConstraint baseColumnNames="answers_id" baseTableName="completed_question_answers" constraintName="fk_comqueans_on_survey_question_answer" referencedColumnNames="id" referencedTableName="survey_question_answer"/>
 
         <createTable tableName="survey_question_exclusion">
             <column autoIncrement="true" name="id" type="BIGINT">

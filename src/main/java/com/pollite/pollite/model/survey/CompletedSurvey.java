@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ public class CompletedSurvey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    private Survey survey;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CompletedQuestion> completedQuestions = new ArrayList<>();

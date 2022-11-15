@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,6 +33,6 @@ public class CompletedQuestion {
     @ManyToOne
     private SurveyQuestion question;
 
-    @OneToMany
-    private List<SurveyQuestionAnswer> answer;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SurveyQuestionAnswer> answers;
 }

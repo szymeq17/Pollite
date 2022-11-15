@@ -1,6 +1,10 @@
 package com.pollite.pollite.controller;
 
+import com.pollite.pollite.dto.CompletedSurveyDto;
 import com.pollite.pollite.dto.SurveyDto;
+import com.pollite.pollite.exception.InvalidCompletedSurveyException;
+import com.pollite.pollite.exception.SurveyDoesNotExistException;
+import com.pollite.pollite.exception.SurveyNotActiveException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.service.survey.SurveyService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +30,8 @@ public class SurveyController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void createSurvey(@Valid @RequestBody SurveyDto surveyDto, Principal principal) throws UserDoesNotExistException {
+    public void createSurvey(@Valid @RequestBody SurveyDto surveyDto, Principal principal)
+            throws UserDoesNotExistException {
         surveyService.addSurvey(surveyDto, principal);
     }
 
@@ -35,5 +40,12 @@ public class SurveyController {
         return surveyService.findSurvey(surveyId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/submit")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public void submitCompletedSurvey(@Valid @RequestBody CompletedSurveyDto completedSurveyDto)
+            throws SurveyDoesNotExistException, InvalidCompletedSurveyException, SurveyNotActiveException {
+        surveyService.submitCompletedSurvey(completedSurveyDto);
     }
 }
