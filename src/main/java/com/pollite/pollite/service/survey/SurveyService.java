@@ -54,4 +54,8 @@ public class SurveyService {
 
         completedSurveyRepository.save(completedSurvey);
     }
+
+    public void getSurveyResults(Long id) {
+
+    }
 }

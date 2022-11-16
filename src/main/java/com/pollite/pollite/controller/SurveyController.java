@@ -48,4 +48,9 @@ public class SurveyController {
             throws SurveyDoesNotExistException, InvalidCompletedSurveyException, SurveyNotActiveException {
         surveyService.submitCompletedSurvey(completedSurveyDto);
     }
+
+//    @GetMapping("/{surveyId}/results")
+//    public ResponseEntity<?> getSurveyResults(@PathVariable Long surveyId) {
+//
+//    }
 }
