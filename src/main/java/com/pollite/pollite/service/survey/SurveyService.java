@@ -9,6 +9,7 @@ import com.pollite.pollite.exception.SurveyDoesNotExistException;
 import com.pollite.pollite.exception.SurveyNotActiveException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.model.survey.Survey;
+import com.pollite.pollite.model.survey.SurveyConfiguration;
 import com.pollite.pollite.repository.CompletedSurveyRepository;
 import com.pollite.pollite.repository.SurveyRepository;
 import com.pollite.pollite.service.poll.UserService;
@@ -39,6 +40,11 @@ public class SurveyService {
         var owner = userService.findUserByUsername(principal.getName());
         var survey = surveyMapper.fromDto(surveyDto);
         survey.setOwner(owner);
+
+        if (survey.getConfiguration() == null) {
+            survey.setConfiguration(createDefaultConfiguration());
+        }
+
         surveyRepository.save(survey);
     }
 
@@ -54,8 +60,9 @@ public class SurveyService {
 
         completedSurveyRepository.save(completedSurvey);
     }
-
-    public void getSurveyResults(Long id) {
-
+    private SurveyConfiguration createDefaultConfiguration() {
+        return SurveyConfiguration.builder()
+                .isActive(true)
+                .build();
     }
 }

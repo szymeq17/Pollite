@@ -11,13 +11,15 @@ import java.util.List;
 public interface CompletedSurveyRepository extends JpaRepository<CompletedSurvey, Long> {
 
     @Query(
-            value = "SELECT cq.QUESTION_ID as questionId, CQA.ANSWERS_ID as answerId, count(CQA) as total " +
-                    "from completed_survey cs " +
-                    "join completed_survey_completed_questions cscq on cs.id = cscq.COMPLETED_SURVEY_ID " +
-                    "join COMPLETED_QUESTION cq on cscq.COMPLETED_QUESTIONS_ID = cq.ID " +
-                    "join COMPLETED_QUESTION_ANSWERS CQA on cq.ID = CQA.COMPLETED_QUESTION_ID\n" +
-                    "where cs.SURVEY_ID = :surveyId" +
-                    "group by cq.QUESTION_ID, CQA.ANSWERS_ID", nativeQuery = true
+            value = "SELECT sq.ID as questionId, sqa.ID as answerId, count(CQA.ANSWERS_ID) as total " +
+                    "from survey s " +
+                    "join survey_questions sqs on s.id = sqs.survey_id " +
+                    "join survey_question sq on sqs.questions_id = sq.id " +
+                    "join survey_question_answers sqas on sq.id = sqas.SURVEY_QUESTION_ID " +
+                    "join survey_question_answer sqa on sqas.answers_id = sqa.id " +
+                    "left join COMPLETED_QUESTION_ANSWERS CQA on sqa.id = CQA.ANSWERS_ID " +
+                    "where s.id = :surveyId " +
+                    "group by sq.ID, sqa.ID", nativeQuery = true
     )
     public List<SurveyResultsProjection> countAnswers(Long surveyId);
 }

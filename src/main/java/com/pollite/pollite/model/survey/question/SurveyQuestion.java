@@ -7,17 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +33,19 @@ public class SurveyQuestion {
     private Integer order;
 
     @OrderBy("order ASC")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<SurveyQuestionAnswer> answers = new ArrayList<>();
 
     public SurveyQuestionAnswer getAnswerByOrder(int order) {
         return answers.stream()
                 .filter(surveyQuestionAnswer -> surveyQuestionAnswer.getOrder() == order)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public SurveyQuestionAnswer getAnswerById(Long id) {
+        return answers.stream()
+                .filter(surveyQuestionAnswer -> surveyQuestionAnswer.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }

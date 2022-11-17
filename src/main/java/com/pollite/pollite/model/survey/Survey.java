@@ -8,17 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +29,7 @@ public class Survey {
     private User owner;
 
     @OrderBy("order ASC")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<SurveyQuestion> questions = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -48,6 +38,13 @@ public class Survey {
     public SurveyQuestion getQuestionByOrder(int order) {
         return questions.stream()
                 .filter(surveyQuestion -> surveyQuestion.getOrder() == order)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public SurveyQuestion getQuestionById(Long id) {
+        return questions.stream()
+                .filter(surveyQuestion -> surveyQuestion.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }

@@ -6,6 +6,7 @@ import com.pollite.pollite.exception.InvalidCompletedSurveyException;
 import com.pollite.pollite.exception.SurveyDoesNotExistException;
 import com.pollite.pollite.exception.SurveyNotActiveException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
+import com.pollite.pollite.service.survey.CompletedSurveyService;
 import com.pollite.pollite.service.survey.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ import java.security.Principal;
 public class SurveyController {
 
     private final SurveyService surveyService;
+    private final CompletedSurveyService completedSurveyService;
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
@@ -49,8 +51,8 @@ public class SurveyController {
         surveyService.submitCompletedSurvey(completedSurveyDto);
     }
 
-//    @GetMapping("/{surveyId}/results")
-//    public ResponseEntity<?> getSurveyResults(@PathVariable Long surveyId) {
-//
-//    }
+    @GetMapping("/{surveyId}/results")
+    public ResponseEntity<?> getSurveyResults(@PathVariable Long surveyId) throws SurveyDoesNotExistException {
+        return ResponseEntity.ok(completedSurveyService.getSurveyResults(surveyId));
+    }
 }
