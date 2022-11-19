@@ -19,7 +19,8 @@ public interface CompletedSurveyRepository extends JpaRepository<CompletedSurvey
                     "join survey_question_answer sqa on sqas.answers_id = sqa.id " +
                     "left join COMPLETED_QUESTION_ANSWERS CQA on sqa.id = CQA.ANSWERS_ID " +
                     "where s.id = :surveyId " +
-                    "group by sq.ID, sqa.ID", nativeQuery = true
+                    "group by sq.ID, sqa.ID " +
+                    "order by sq.QUESTION_ORDER, sqa.ANSWER_ORDER", nativeQuery = true
     )
     public List<SurveyResultsProjection> countAnswers(Long surveyId);
 }

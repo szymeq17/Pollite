@@ -1,12 +1,16 @@
 package com.pollite.pollite.service.survey;
 
 import com.pollite.pollite.dto.*;
+import com.pollite.pollite.dto.mapper.CompletedSurveyMapper;
+import com.pollite.pollite.exception.InvalidCompletedSurveyException;
 import com.pollite.pollite.exception.SurveyDoesNotExistException;
+import com.pollite.pollite.exception.SurveyNotActiveException;
 import com.pollite.pollite.model.survey.Survey;
 import com.pollite.pollite.model.survey.question.SurveyQuestion;
 import com.pollite.pollite.projection.SurveyResultsProjection;
 import com.pollite.pollite.repository.CompletedSurveyRepository;
 import com.pollite.pollite.repository.SurveyRepository;
+import com.pollite.pollite.validator.CompletedSurveyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +26,17 @@ public class CompletedSurveyService {
 
     private final CompletedSurveyRepository completedSurveyRepository;
     private final SurveyRepository surveyRepository;
+    private final CompletedSurveyMapper completedSurveyMapper;
+    private final CompletedSurveyValidator completedSurveyValidator;
+
+    public void submitCompletedSurvey(CompletedSurveyDto completedSurveyDto)
+            throws SurveyDoesNotExistException, InvalidCompletedSurveyException, SurveyNotActiveException {
+        completedSurveyValidator.validate(completedSurveyDto);
+
+        var completedSurvey = completedSurveyMapper.fromDto(completedSurveyDto);
+
+        completedSurveyRepository.save(completedSurvey);
+    }
 
     public SurveyResultsDto getSurveyResults(Long surveyId) throws SurveyDoesNotExistException {
         var survey = surveyRepository.findById(surveyId)
@@ -53,10 +68,10 @@ public class CompletedSurveyService {
     private SurveyQuestionResultsDto toSurveyQuestionResultsDto(Survey survey,
                                                                 Long questionId,
                                                                 Map<Long, List<SurveyResultsProjection>> resultsByAnswerId) {
-        var answersResults = resultsByAnswerId.entrySet().stream()
-                .map(entry -> toQuestionAnswerResultsDto(
+        var answersResults = resultsByAnswerId.values().stream()
+                .map(surveyResultsProjections -> toQuestionAnswerResultsDto(
                         survey.getQuestionById(questionId),
-                        entry.getValue().get(0))
+                        surveyResultsProjections.get(0))
                 )
                 .toList();
 

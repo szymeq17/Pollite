@@ -48,7 +48,7 @@ public class SurveyController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public void submitCompletedSurvey(@Valid @RequestBody CompletedSurveyDto completedSurveyDto)
             throws SurveyDoesNotExistException, InvalidCompletedSurveyException, SurveyNotActiveException {
-        surveyService.submitCompletedSurvey(completedSurveyDto);
+        completedSurveyService.submitCompletedSurvey(completedSurveyDto);
     }
 
     @GetMapping("/{surveyId}/results")

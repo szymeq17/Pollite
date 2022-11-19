@@ -29,10 +29,8 @@ public class SurveyService {
     private final UserService userService;
 
     private final SurveyRepository surveyRepository;
-    private final CompletedSurveyRepository completedSurveyRepository;
     private final SurveyMapper surveyMapper;
-    private final CompletedSurveyMapper completedSurveyMapper;
-    private final CompletedSurveyValidator completedSurveyValidator;
+
 
     private final Clock clok;
 
@@ -52,14 +50,6 @@ public class SurveyService {
         return surveyRepository.findById(id).map(surveyMapper::toDto);
     }
 
-    public void submitCompletedSurvey(CompletedSurveyDto completedSurveyDto)
-            throws SurveyDoesNotExistException, InvalidCompletedSurveyException, SurveyNotActiveException {
-        completedSurveyValidator.validate(completedSurveyDto);
-
-        var completedSurvey = completedSurveyMapper.fromDto(completedSurveyDto);
-
-        completedSurveyRepository.save(completedSurvey);
-    }
     private SurveyConfiguration createDefaultConfiguration() {
         return SurveyConfiguration.builder()
                 .isActive(true)
