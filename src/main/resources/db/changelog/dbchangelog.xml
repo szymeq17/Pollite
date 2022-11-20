@@ -6,4 +6,5 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
     <include file="version/changelog_20220926_init.xml" relativeToChangelogFile="true"/>
     <include file="version/changelog_20221010_survey.xml" relativeToChangelogFile="true"/>
+    <include file="version/changelog_20221120_roles.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
