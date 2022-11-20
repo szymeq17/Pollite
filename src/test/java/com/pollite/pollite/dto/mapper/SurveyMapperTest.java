@@ -4,7 +4,7 @@ import com.pollite.pollite.dto.SurveyConfigurationDto;
 import com.pollite.pollite.dto.SurveyDto;
 import com.pollite.pollite.dto.SurveyQuestionAnswerDto;
 import com.pollite.pollite.dto.SurveyQuestionDto;
-import com.pollite.pollite.model.User;
+import com.pollite.pollite.model.auth.User;
 import com.pollite.pollite.model.survey.Survey;
 import com.pollite.pollite.model.survey.SurveyConfiguration;
 import com.pollite.pollite.model.survey.answer.SurveyQuestionAnswer;

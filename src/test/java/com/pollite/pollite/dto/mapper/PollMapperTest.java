@@ -4,7 +4,7 @@ import com.pollite.pollite.dto.PollAnswerDto;
 import com.pollite.pollite.dto.PollDto;
 import com.pollite.pollite.model.Poll;
 import com.pollite.pollite.model.PollAnswer;
-import com.pollite.pollite.model.User;
+import com.pollite.pollite.model.auth.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

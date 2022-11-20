@@ -1,4 +1,4 @@
-package com.pollite.pollite.model;
+package com.pollite.pollite.model.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

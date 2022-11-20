@@ -1,7 +1,7 @@
 package com.pollite.pollite.service.poll;
 
 import com.pollite.pollite.exception.UserDoesNotExistException;
-import com.pollite.pollite.model.User;
+import com.pollite.pollite.model.auth.User;
 import com.pollite.pollite.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

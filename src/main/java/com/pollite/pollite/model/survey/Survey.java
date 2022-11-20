@@ -1,6 +1,6 @@
 package com.pollite.pollite.model.survey;
 
-import com.pollite.pollite.model.User;
+import com.pollite.pollite.model.auth.User;
 import com.pollite.pollite.model.survey.question.SurveyQuestion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

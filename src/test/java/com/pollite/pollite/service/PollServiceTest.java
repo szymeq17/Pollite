@@ -9,7 +9,7 @@ import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.exception.UserNotAuthorizedException;
 import com.pollite.pollite.model.Poll;
 import com.pollite.pollite.model.PollAnswer;
-import com.pollite.pollite.model.User;
+import com.pollite.pollite.model.auth.User;
 import com.pollite.pollite.repository.PollAnswerRepository;
 import com.pollite.pollite.repository.PollRepository;
 import com.pollite.pollite.service.poll.PollService;

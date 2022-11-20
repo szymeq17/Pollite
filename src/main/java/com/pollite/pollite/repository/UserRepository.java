@@ -1,6 +1,6 @@
 package com.pollite.pollite.repository;
 
-import com.pollite.pollite.model.User;
+import com.pollite.pollite.model.auth.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

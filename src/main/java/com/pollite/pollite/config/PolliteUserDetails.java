@@ -1,6 +1,6 @@
 package com.pollite.pollite.config;
 
-import com.pollite.pollite.model.User;
+import com.pollite.pollite.model.auth.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,6 +1,6 @@
 package com.pollite.pollite.service;
 
-import com.pollite.pollite.model.User;
+import com.pollite.pollite.model.auth.User;
 import com.pollite.pollite.repository.UserRepository;
 import com.pollite.pollite.service.poll.PolliteUserDetailsService;
 import org.junit.jupiter.api.Test;
