@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+
+@import '~mdb-angular-ui-kit/assets/scss/mdb.scss';
+
+$pollite-primary-color: #D00224;
+
+$theme-colors: (
+  primary: $pollite-primary-color
+);
+
+.btn-primary {
+  @include button-variant(
+      $pollite-primary-color,
+      darken($pollite-primary-color, 7.5%),
+      color-contrast($pollite-primary-color),
+      lighten($pollite-primary-color,5%),
+      lighten($pollite-primary-color, 10%),
+      color-contrast($pollite-primary-color),);
+}
+
+.btn-outline-primary {
+  @include button-outline-variant($pollite-primary-color, #222222, lighten($pollite-primary-color,5%), $pollite-primary-color);
+}

@@ -1,0 +1,17 @@
+@import "src/styles";
+
+.form-check {
+  margin-top: 1rem;
+}
+
+.btn {
+  margin-top: 1rem;
+}
+
+.form-check-input[type="radio"]:checked::after {
+  background-color: $pollite-primary-color;
+}
+
+.form-check-input[type="radio"]:checked {
+  border-color: $pollite-primary-color;
+}
