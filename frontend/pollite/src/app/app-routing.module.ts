@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {PollItemComponent} from "./poll/poll-item/poll-item.component";
+import {PollsComponent} from "./poll/polls/polls/polls.component";
 
 const routes: Routes = [
-  { path: 'poll', component: PollItemComponent }
+  { path: 'polls', component: PollsComponent }
 ];
 
 @NgModule({

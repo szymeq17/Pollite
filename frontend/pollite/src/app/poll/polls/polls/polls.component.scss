@@ -1,0 +1,24 @@
+.polls-container {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.poll-item {
+  width: 70%;
+}
+
+.pagination {
+  background-color: white;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  box-shadow: 5px 5px 10px black;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
+}

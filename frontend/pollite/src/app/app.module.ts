@@ -23,13 +23,15 @@ import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PaginationComponent } from './pagination/pagination.component';
 import { PollItemComponent } from './poll/poll-item/poll-item.component';
+import { PollsComponent } from './poll/polls/polls/polls.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     PaginationComponent,
-    PollItemComponent
+    PollItemComponent,
+    PollsComponent
   ],
   imports: [
     BrowserModule,
