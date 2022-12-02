@@ -14,6 +14,8 @@ import com.pollite.pollite.model.PollAnswer;
 import com.pollite.pollite.repository.PollAnswerRepository;
 import com.pollite.pollite.repository.PollRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -47,6 +49,10 @@ public class PollService {
 
     public Optional<PollDto> findPoll(Long id) {
         return pollRepository.findById(id).map(pollMapper::toDto);
+    }
+
+    public Page<PollDto> getPolls(Pageable pageable) {
+        return pollRepository.findAll(pageable).map(pollMapper::toDto);
     }
 
     public void deletePoll(Long pollId, Principal principal) throws UserDoesNotExistException, PollDoesNotExistException, UserNotAuthorizedException {

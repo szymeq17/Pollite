@@ -9,6 +9,7 @@
         name="inlineRadioOptions"
         id={{answer.id}}
         value={{answer.id}}
+        [(ngModel)]="selectedAnswer"
       />
       <label class="form-check-label" for="{{answer.id}}">{{answer.text}}</label>
     </div>
@@ -16,7 +17,7 @@
       <button
         class="btn btn-primary"
         type="button"
-        (click)="basicCollapse.toggle()"
+        (click)="vote()"
         [attr.aria-expanded]="!basicCollapse.collapsed"
         aria-controls="collapseExample"
       >
