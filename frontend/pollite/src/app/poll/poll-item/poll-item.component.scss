@@ -15,3 +15,48 @@
 .form-check-input[type="radio"]:checked {
   border-color: $pollite-primary-color;
 }
+
+.results-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 10px;
+}
+
+.result-info {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.numbers {
+  display: flex;
+}
+
+.percentage-pill {
+  background-color: #D00224;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 5px;
+  width: 70px;
+}
+
+.votes-pill {
+  background-color: #707070;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  width: 70px;
+}
+
+.votes-total {
+  background-color: #707070;
+  color: white;
+  width: 60%;
+  padding: 2px;
+  border-radius: 10px;
+  margin-top: 10px;
+}

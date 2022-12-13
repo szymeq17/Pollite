@@ -80,7 +80,7 @@ public class PollService {
     }
 
     @Transactional
-    public void vote(Long pollId, Long pollAnswerId)
+    public PollResults vote(Long pollId, Long pollAnswerId)
             throws PollAnswerDoesNotExistException, PollNotActiveException, PollDoesNotExistException {
         var poll = pollRepository.findById(pollId).orElseThrow(() -> new PollDoesNotExistException(pollId));
 
@@ -93,6 +93,8 @@ public class PollService {
         }
 
         pollAnswerRepository.incrementVotes(pollAnswerId);
+
+        return getPollResults(pollId);
     }
 
     public PollResults getPollResults(Long pollId) throws PollDoesNotExistException {

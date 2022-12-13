@@ -11,3 +11,14 @@ export interface PollAnswer {
   id: number,
   text: string
 }
+
+export interface PollResults {
+  results: PollAnswerResult[],
+  votesTotal: number
+}
+
+export interface PollAnswerResult {
+  pollAnswerText: string,
+  votes: number;
+  percentage: number;
+}

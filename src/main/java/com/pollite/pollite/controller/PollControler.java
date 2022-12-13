@@ -64,7 +64,7 @@ public class PollControler {
 
     @PostMapping("/{pollId}/vote/{pollAnswerId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void vote(@PathVariable Long pollId, @PathVariable Long pollAnswerId) throws PollAnswerDoesNotExistException, PollNotActiveException, PollDoesNotExistException {
-        pollService.vote(pollId, pollAnswerId);
+    public ResponseEntity<PollResults> vote(@PathVariable Long pollId, @PathVariable Long pollAnswerId) throws PollAnswerDoesNotExistException, PollNotActiveException, PollDoesNotExistException {
+        return ResponseEntity.ok(pollService.vote(pollId, pollAnswerId));
     }
 }
