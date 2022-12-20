@@ -4,6 +4,8 @@
   align-items: center;
   flex-direction: column;
   gap: 2rem;
+  max-height: 85%;
+  overflow: scroll;
 }
 
 .poll-item {
@@ -12,7 +14,7 @@
 
 .pagination {
   background-color: white;
-  position: fixed;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,5 +22,4 @@
   box-shadow: 5px 5px 10px black;
   bottom: 0;
   width: 100%;
-  z-index: 1;
 }

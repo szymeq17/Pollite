@@ -1,115 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {Poll} from "../../../model/Poll";
 import {PollService} from "../../../service/poll.service";
+import {MatPaginator} from "@angular/material/paginator";
+import {tap} from "rxjs";
 
 @Component({
   selector: 'app-polls',
   templateUrl: './polls.component.html',
   styleUrls: ['./polls.component.scss']
 })
-export class PollsComponent implements OnInit {
+export class PollsComponent implements OnInit, AfterViewInit {
 
   polls: Poll[] = [];
-  // polls: Poll[] = [
-  //   {
-  //     id: 1,
-  //     ownerUsername: 'szymeq17',
-  //     text: 'Kto powinien wygrać wybory?',
-  //     pollAnswers: [
-  //       {
-  //         id: 1,
-  //         text: 'PiS'
-  //       },
-  //       {
-  //         id: 2,
-  //         text: 'Polska 2050'
-  //       },
-  //       {
-  //         id: 3,
-  //         text: 'PO'
-  //       },
-  //       {
-  //         id: 4,
-  //         text: 'Konfederacja'
-  //       }
-  //     ],
-  //     startDateTime: new Date(2022, 11, 27, 0, 0, 0, 0)
-  //   },
-  //   {
-  //     id: 2,
-  //     ownerUsername: 'szymeq17',
-  //     text: 'Które zwierze lubisz najbardziej?',
-  //     pollAnswers: [
-  //       {
-  //         id: 5,
-  //         text: 'Pies'
-  //       },
-  //       {
-  //         id: 6,
-  //         text: 'Kot'
-  //       },
-  //       {
-  //         id: 7,
-  //         text: 'Chomik'
-  //       },
-  //       {
-  //         id: 8,
-  //         text: 'Świnka morska'
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     id: 2,
-  //     ownerUsername: 'szymeq17',
-  //     text: 'Które zwierze lubisz najbardziej?',
-  //     pollAnswers: [
-  //       {
-  //         id: 5,
-  //         text: 'Pies'
-  //       },
-  //       {
-  //         id: 6,
-  //         text: 'Kot'
-  //       },
-  //       {
-  //         id: 7,
-  //         text: 'Chomik'
-  //       },
-  //       {
-  //         id: 8,
-  //         text: 'Świnka morska'
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     id: 2,
-  //     ownerUsername: 'szymeq17',
-  //     text: 'Które zwierze lubisz najbardziej?',
-  //     pollAnswers: [
-  //       {
-  //         id: 5,
-  //         text: 'Pies'
-  //       },
-  //       {
-  //         id: 6,
-  //         text: 'Kot'
-  //       },
-  //       {
-  //         id: 7,
-  //         text: 'Chomik'
-  //       },
-  //       {
-  //         id: 8,
-  //         text: 'Świnka morska'
-  //       }
-  //     ]
-  //   }
-  // ];
+  pollsTotal: number;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private pollService: PollService) { }
 
   ngOnInit(): void {
-    this.pollService.getPolls(0, 10).subscribe(
+    this.pollService.getPolls(0, 3).subscribe(
+      data => {
+        this.polls = data['content'];
+        this.pollsTotal = data['totalElements'];
+      }
+    );
+  }
+
+  ngAfterViewInit(): void {
+    this.paginator.page
+      .pipe(
+        tap(() => this.loadPolls())
+      )
+      .subscribe();
+  }
+
+  loadPolls(): void {
+    this.pollService.getPolls(this.paginator.pageIndex, this.paginator.pageSize).subscribe(
       data => this.polls = data['content']
     );
   }

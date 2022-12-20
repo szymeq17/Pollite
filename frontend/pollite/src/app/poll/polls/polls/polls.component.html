@@ -2,5 +2,6 @@
   <app-poll-item class="poll-item" *ngFor="let poll of polls" [poll]="poll"></app-poll-item>
 </div>
 <div class="pagination">
-  <app-pagination></app-pagination>
+  <mat-paginator [length]="pollsTotal" [pageSize]="3" [pageSizeOptions]="[3, 5, 10]"></mat-paginator>
 </div>
+

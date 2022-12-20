@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {Poll} from "./model/Poll";
 
 @Component({
   selector: 'app-root',

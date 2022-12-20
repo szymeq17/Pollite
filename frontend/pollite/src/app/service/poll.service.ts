@@ -13,7 +13,7 @@ export class PollService {
   public getPolls(page: number, pageSize: number): Observable<any> {
     const params = new HttpParams()
       .set('page', page)
-      .set('pageSize', pageSize);
+      .set('size', pageSize);
 
     return this.http.get(this.POLL_API_PATH, {'params': params});
   }
