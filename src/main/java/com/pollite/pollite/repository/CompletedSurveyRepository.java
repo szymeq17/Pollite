@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface CompletedSurveyRepository extends JpaRepository<CompletedSurvey, Long> {
 
@@ -22,5 +24,7 @@ public interface CompletedSurveyRepository extends JpaRepository<CompletedSurvey
                     "group by sq.ID, sqa.ID " +
                     "order by sq.QUESTION_ORDER, sqa.ANSWER_ORDER", nativeQuery = true
     )
-    public List<SurveyResultsProjection> countAnswers(Long surveyId);
+    List<SurveyResultsProjection> countAnswers(Long surveyId);
+
+    Stream<CompletedSurvey> findAllBySurveyId(Long surveyId);
 }

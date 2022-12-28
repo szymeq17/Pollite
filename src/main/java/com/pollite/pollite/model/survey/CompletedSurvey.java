@@ -1,6 +1,7 @@
 package com.pollite.pollite.model.survey;
 
 import com.pollite.pollite.model.survey.question.CompletedQuestion;
+import com.pollite.pollite.model.survey.question.SurveyQuestion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,4 +37,11 @@ public class CompletedSurvey {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CompletedQuestion> completedQuestions = new ArrayList<>();
+
+    public CompletedQuestion getCompletedQuestionById(Long id) {
+        return completedQuestions.stream()
+                .filter(completedQuestion -> completedQuestion.getQuestion().getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
 }
