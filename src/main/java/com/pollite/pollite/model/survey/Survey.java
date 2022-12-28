@@ -29,7 +29,7 @@ public class Survey {
     private User owner;
 
     @OrderBy("order ASC")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SurveyQuestion> questions = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)

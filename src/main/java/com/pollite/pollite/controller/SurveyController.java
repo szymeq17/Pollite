@@ -1,6 +1,7 @@
 package com.pollite.pollite.controller;
 
 import com.pollite.pollite.dto.CompletedSurveyDto;
+import com.pollite.pollite.dto.CompletedSurveyFilter;
 import com.pollite.pollite.dto.SurveyDto;
 import com.pollite.pollite.exception.InvalidCompletedSurveyException;
 import com.pollite.pollite.exception.SurveyDoesNotExistException;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/survey")
@@ -51,8 +53,10 @@ public class SurveyController {
         completedSurveyService.submitCompletedSurvey(completedSurveyDto);
     }
 
-    @GetMapping("/{surveyId}/results")
-    public ResponseEntity<?> getSurveyResults(@PathVariable Long surveyId) throws SurveyDoesNotExistException {
-        return ResponseEntity.ok(completedSurveyService.getSurveyResults(surveyId));
+    @PostMapping("/{surveyId}/results")
+    public ResponseEntity<?> getSurveyResults(@PathVariable Long surveyId,
+                                              @RequestBody(required = false) List<CompletedSurveyFilter> filters)
+            throws SurveyDoesNotExistException {
+        return ResponseEntity.ok(completedSurveyService.getSurveyResults(surveyId, filters));
     }
 }

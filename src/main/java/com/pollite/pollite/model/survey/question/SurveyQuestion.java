@@ -33,7 +33,7 @@ public class SurveyQuestion {
     private Integer order;
 
     @OrderBy("order ASC")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SurveyQuestionAnswer> answers = new ArrayList<>();
 
     public SurveyQuestionAnswer getAnswerByOrder(int order) {
