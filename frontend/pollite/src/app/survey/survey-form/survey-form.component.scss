@@ -1,0 +1,31 @@
+@import "src/styles";
+
+.container {
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.publish-btn {
+  background-color: $pollite-primary-color;
+  color: white;
+  height: 40px;
+  padding: 5px;
+  border: 0;
+  border-radius: 5px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.question-container {
+  border: 1px solid black;
+}
+
+.answer-container {
+  border: 1px solid black;
+}
