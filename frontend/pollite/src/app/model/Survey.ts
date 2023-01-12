@@ -1,30 +1,30 @@
 export interface Survey {
-  id: number,
-  ownerUsername: string,
+  id?: number,
+  ownerUsername?: string,
   questions: SurveyQuestion[]
-  configuration: SurveyConfiguration
+  configuration?: SurveyConfiguration
 }
 
 export interface SurveyQuestion {
-  id: number,
-  questionType: string,
+  id?: number,
+  type: string,
   text: string,
   order: number,
   answers: SurveyQuestionAnswer[]
 }
 
 export interface SurveyQuestionAnswer {
-  id: number,
+  id?: number,
   text: string,
   order: number
 }
 
 export interface SurveyConfiguration {
-  id: number,
-  isActive: boolean,
-  startDate: Date,
-  endDate: Date,
-  exclusions: SurveyQuestionExclusion[]
+  id?: number,
+  isActive?: boolean,
+  startDate?: Date,
+  endDate?: Date,
+  exclusions?: SurveyQuestionExclusion[]
 }
 
 export interface SurveyQuestionExclusion {

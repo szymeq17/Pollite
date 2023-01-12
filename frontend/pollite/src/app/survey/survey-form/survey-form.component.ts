@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {Survey, SurveyQuestion, SurveyQuestionAnswer} from "../../model/Survey";
+import {SurveyService} from "../service/survey.service";
 
 @Component({
   selector: 'app-survey-form',
@@ -10,13 +12,15 @@ export class SurveyFormComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private surveyService: SurveyService) {
   }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       description: '',
-      questions: this.fb.array([this.newQuestion()])
+      questions: this.fb.array([this.newQuestion()]),
+      exclusions: this.fb.array([])
     });
   }
 
@@ -24,7 +28,11 @@ export class SurveyFormComponent implements OnInit {
     return this.form.get('questions') as FormArray;
   }
 
-  questionAnswers(questionIndex: number) {
+  get exclusionForms() {
+    return this.form.get('exclusions') as FormArray;
+  }
+
+  questionAnswerForms(questionIndex: number) {
     return this.questionForms.at(questionIndex).get('answers') as FormArray;
   }
 
@@ -37,11 +45,83 @@ export class SurveyFormComponent implements OnInit {
   }
 
   addAnswerToQuestion(questionIndex: number) {
-    this.questionAnswers(questionIndex).push(this.newAnswer());
+    this.questionAnswerForms(questionIndex).push(this.newAnswer());
   }
 
   removeAnswerFromQuestion(questionIndex: number, answerIndex: number) {
-    this.questionAnswers(questionIndex).removeAt(answerIndex);
+    this.questionAnswerForms(questionIndex).removeAt(answerIndex);
+  }
+
+  addExclusion() {
+    this.exclusionForms.push(this.newExclusion());
+  }
+
+  removeExclusion(exclusionIndex: number) {
+    this.exclusionForms.removeAt(exclusionIndex);
+  }
+
+  questionNumbers() {
+    return Array.from(this.questionForms.controls.keys()).map(key => key + 1);
+  }
+
+  answerNumbers(exclusionIndex: number) {
+    const questionNumber = this.exclusionForms.at(exclusionIndex).get('questionOrder')?.value as number;
+    if (questionNumber === null) {
+      return [];
+    }
+    return Array.from(this.questionAnswerForms(questionNumber - 1).controls.keys()).map(key => key + 1);
+  }
+
+  questionNumbersPossibleToExclude(exclusionIndex: number) {
+    const questionNumber = this.exclusionForms.at(exclusionIndex).get('questionOrder')?.value as number;
+    if (questionNumber === null) {
+      return [];
+    }
+    return this.questionNumbers().filter(number => number > questionNumber);
+  }
+
+  moveQuestionUp(questionIndex: number) {
+    if (questionIndex > 0) {
+      const array = this.questionForms.value;
+      const newArray = this.swap(array, questionIndex - 1, questionIndex);
+      this.questionForms.setValue(newArray);
+    }
+  }
+
+  moveQuestionDown(questionIndex: number) {
+    const array = this.questionForms.value;
+    if (questionIndex < array.length - 1) {
+      const newArray = this.swap(array, questionIndex, questionIndex + 1);
+      this.questionForms.setValue(newArray);
+    }
+  }
+
+  moveAnswerUp(questionIndex: number, answerIndex: number) {
+    if (answerIndex > 0) {
+      const array = this.questionAnswerForms(questionIndex).value;
+      const newArray = this.swap(array, answerIndex - 1, answerIndex);
+      this.questionAnswerForms(questionIndex).setValue(newArray);
+    }
+  }
+
+  moveAnswerDown(questionIndex: number, answerIndex: number) {
+    const array = this.questionAnswerForms(questionIndex).value;
+    if (answerIndex < array.length - 1) {
+      const newArray = this.swap(array, answerIndex, answerIndex + 1);
+      this.questionAnswerForms(questionIndex).setValue(newArray);
+    }
+  }
+
+  onSubmit() {
+    this.surveyService.createSurvey(this.buildSurveyFromForm()).subscribe();
+  }
+
+  private swap(arr: any[], index1: number, index2: number): any[] {
+    arr = [...arr];
+    const temp = arr[index1];
+    arr[index1] = arr[index2];
+    arr[index2] = temp;
+    return arr;
   }
 
   private newQuestion() {
@@ -58,8 +138,38 @@ export class SurveyFormComponent implements OnInit {
     });
   }
 
-  saveSurvey() {
+  private newExclusion() {
+    return this.fb.group({
+      questionOrder: null,
+      answerOrder: null,
+      excludedQuestionOrder: null
+    });
+  }
 
+  private buildSurveyFromForm(): Survey {
+    return {
+      questions: this.form.get('questions')?.value
+        .map((question: any, index: number) => this.buildQuestionFromForm(question, index)),
+      configuration: {
+        exclusions: this.form.get('exclusions')?.value
+      }
+    } as Survey
+  }
+
+  private buildQuestionFromForm(formQuestion: any, index: number) {
+    return {
+      type: formQuestion.multiChoice ? 'MULTI_CHOICE' : 'SINGLE_CHOICE',
+      text: formQuestion.text,
+      order: index + 1,
+      answers: formQuestion.answers.map((answer: any, index: number) => this.buildAnswerFromForm(answer, index))
+    } as SurveyQuestion
+  }
+
+  private buildAnswerFromForm(formAnswer: any, index: number): SurveyQuestionAnswer {
+    return {
+      text: formAnswer.text,
+      order: index + 1
+    } as SurveyQuestionAnswer
   }
 
 }

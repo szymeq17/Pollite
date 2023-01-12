@@ -33,6 +33,7 @@ import {MatInputModule} from "@angular/material/input";
 import { SurveyFormComponent } from './survey/survey-form/survey-form.component';
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import {MatIconModule} from "@angular/material/icon";
     MatInputModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]
