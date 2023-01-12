@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Poll, PollResults} from "../../model/Poll";
-import {PollService} from "../../service/poll.service";
+import {PollService} from "../service/poll.service";
 
 @Component({
   selector: 'app-poll-item',

@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Constants} from "../config/constants";
+import {Constants} from "../../config/constants";
 import {Observable} from "rxjs";
-import {PollResults} from "../model/Poll";
+import {PollResults} from "../../model/Poll";
 
 @Injectable({providedIn: 'root'})
 export class PollService {
