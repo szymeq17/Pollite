@@ -1,27 +1,45 @@
 <div class="container">
   <form [formGroup]="form" class="form">
-    Value: {{ form.value | json }}
     <mat-form-field>
       <textarea matInput placeholder="Your survey description..." formControlName="description"></textarea>
     </mat-form-field>
 
     <div formArrayName="questions" class="questions-container">
       <div *ngFor="let question of questionForms.controls; let questionIndex=index" [formGroupName]="questionIndex" class="question-container">
-        <mat-form-field>
-          <input matInput placeholder="Question" formControlName="text">
-        </mat-form-field>
-        <div *ngFor="let answer of questionAnswers(questionIndex).controls; let answerIndex=index" formArrayName="answers" class="answer-container">
-          <div [formGroupName]="answerIndex">
-            <mat-form-field>
-              <input matInput placeholder="Answer" formControlName="text">
-            </mat-form-field>
+        <div class="question-info">
+          <div class="question-order-controls">
+            <div class="question-order-value">25</div>
+            <div>
+              <mat-icon>arrow_upward</mat-icon>
+              <mat-icon>arrow_downward</mat-icon>
+            </div>
+          </div>
+          <mat-form-field>
+            <textarea matInput placeholder="Question" formControlName="text"></textarea>
+          </mat-form-field>
+          <button mat-raised-button color="warn" (click)="removeQuestion(questionIndex)">Remove</button>
+        </div>
+        <div formArrayName="answers" class="answers-container">
+          <div *ngFor="let answer of questionAnswers(questionIndex).controls; let answerIndex=index" [formGroupName]="answerIndex" class="answer-container">
+            <div class="answer-info">
+              <div class="answer-order-controls">
+                <div class="answer-order-value">2</div>
+
+                <mat-icon>arrow_upward</mat-icon>
+                <mat-icon>arrow_downward</mat-icon>
+              </div>
+              <mat-form-field>
+                <input matInput placeholder="Answer" formControlName="text">
+              </mat-form-field>
+            </div>
+
             <button mat-raised-button color="warn" (click)="removeAnswerFromQuestion(questionIndex, answerIndex)">
               Remove
             </button>
           </div>
+          <button mat-raised-button color="primary" (click)="addAnswerToQuestion(questionIndex)">Add answer</button>
         </div>
-        <button mat-raised-button color="primary" (click)="addAnswerToQuestion(questionIndex)">Add answer</button>
-        <button mat-raised-button color="warn" (click)="removeQuestion(questionIndex)">Remove</button>
+
       </div>
     </div>
     <button mat-raised-button color="primary" (click)="addQuestion()">Add question</button>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-survey-form',
@@ -16,7 +16,7 @@ export class SurveyFormComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       description: '',
-      questions: this.fb.array([])
+      questions: this.fb.array([this.newQuestion()])
     });
   }
 
@@ -29,13 +29,7 @@ export class SurveyFormComponent implements OnInit {
   }
 
   addQuestion() {
-    const question = this.fb.group({
-      text: '',
-      answers: this.fb.array([]),
-      multiChoice: false
-    });
-
-    this.questionForms.push(question);
+    this.questionForms.push(this.newQuestion());
   }
 
   removeQuestion(questionIndex: number) {
@@ -43,15 +37,29 @@ export class SurveyFormComponent implements OnInit {
   }
 
   addAnswerToQuestion(questionIndex: number) {
-    const answer = this.fb.group({
-      text: ''
-    });
-
-    this.questionAnswers(questionIndex).push(answer);
+    this.questionAnswers(questionIndex).push(this.newAnswer());
   }
 
   removeAnswerFromQuestion(questionIndex: number, answerIndex: number) {
     this.questionAnswers(questionIndex).removeAt(answerIndex);
+  }
+
+  private newQuestion() {
+    return this.fb.group({
+      text: '',
+      answers: this.fb.array([this.newAnswer(), this.newAnswer()]),
+      multiChoice: false
+    });
+  }
+
+  private newAnswer() {
+    return this.fb.group({
+      text: ''
+    });
+  }
+
+  saveSurvey() {
+
   }
 
 }
