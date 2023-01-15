@@ -1,5 +1,5 @@
 <div class="container">
-  <form [formGroup]="form" class="form">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
     <h2>Description</h2>
     <mat-form-field>
       <textarea matInput placeholder="Your survey description..." formControlName="description" required></textarea>
@@ -10,13 +10,13 @@
         <div class="question-info">
           <div class="question-order-value">Question {{ questionIndex + 1 }}</div>
           <div class="question-order-controls">
-            <button (click)="moveQuestionUp(questionIndex)" class="control-btn question-control-btn">
+            <button type="button" (click)="moveQuestionUp(questionIndex)" class="control-btn question-control-btn">
               <mat-icon [ngStyle]="{'color':'#D00224'}">arrow_upward</mat-icon>
             </button>
-            <button (click)="moveQuestionDown(questionIndex)" class="control-btn question-control-btn">
+            <button type="button" (click)="moveQuestionDown(questionIndex)" class="control-btn question-control-btn">
               <mat-icon [ngStyle]="{'color':'#D00224'}">arrow_downward</mat-icon>
             </button>
-            <button (click)="removeQuestion(questionIndex)" class="control-btn question-control-btn">
+            <button type="button" (click)="removeQuestion(questionIndex)" class="control-btn question-control-btn">
               <mat-icon [ngStyle]="{'color':'#D00224'}">delete</mat-icon>
             </button>
           </div>
@@ -37,25 +37,28 @@
               <input matInput placeholder="Answer" formControlName="text" required>
             </mat-form-field>
             <div class="answer-order-controls">
-              <button (click)="moveAnswerUp(questionIndex, answerIndex)" class="control-btn answer-control-btn">
+              <button type="button" (click)="moveAnswerUp(questionIndex, answerIndex)" class="control-btn answer-control-btn">
                 <mat-icon [ngStyle]="{'color':'#D00224'}">arrow_upward</mat-icon>
               </button>
-              <button (click)="moveAnswerDown(questionIndex, answerIndex)" class="control-btn answer-control-btn">
+              <button type="button" (click)="moveAnswerDown(questionIndex, answerIndex)" class="control-btn answer-control-btn">
                 <mat-icon [ngStyle]="{'color':'#D00224'}">arrow_downward</mat-icon>
               </button>
-              <button (click)="removeAnswerFromQuestion(questionIndex, answerIndex)" class="control-btn answer-control-btn">
+              <button type="button" (click)="removeAnswerFromQuestion(questionIndex, answerIndex)" class="control-btn answer-control-btn">
                 <mat-icon [ngStyle]="{'color':'#D00224'}">delete</mat-icon>
               </button>
             </div>
           </div>
-          <button (click)="addAnswerToQuestion(questionIndex)" class="add-answer-btn">
+          <button type="button" (click)="addAnswerToQuestion(questionIndex)" class="add-answer-btn">
             <mat-icon [ngStyle]="{'color':'white'}">add</mat-icon>
           </button>
         </div>
       </div>
     </div>
-    <button class="btn-primary add-question-btn" (click)="addQuestion()">Add question</button>
+    <button type="button" class="btn-primary add-question-btn" (click)="addQuestion()">Add question</button>
     <h2>Exclusions</h2>
+    <div *ngIf="exclusionForms.controls.length === 0">
+      No exclusions applied. Add exclusion to prevent user from answering questions based on their previous answers.
+    </div>
     <div formArrayName="exclusions" class="exclusions-container">
       <div *ngFor="let exclusion of exclusionForms.controls; let exclusionIndex=index" [formGroupName]="exclusionIndex" class="exclusion-container">
         <mat-form-field appearance="fill">
@@ -82,12 +85,26 @@
             </option>
           </select>
         </mat-form-field>
-        <button (click)="removeExclusion(exclusionIndex)" class="control-btn answer-control-btn">
+        <button type="button" (click)="removeExclusion(exclusionIndex)" class="control-btn answer-control-btn">
           <mat-icon [ngStyle]="{'color':'#D00224'}">delete</mat-icon>
         </button>
       </div>
     </div>
-    <button class="btn-primary add-question-btn" (click)="addExclusion()">Add exclusion</button>
-    <button (click)="onSubmit()" class="btn btn-primary">Publish survey</button>
+    <button type="button" class="btn-primary add-question-btn" (click)="addExclusion()">Add exclusion</button>
+    <h2>Availability</h2>
+    <div class="availability-container">
+      <mat-checkbox formControlName="isActive" color="warn">Make active after publishing</mat-checkbox>
+      <mat-form-field appearance="fill">
+        <mat-label>Enter a date range in which survey should be active or leave blank if not applicable</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input formControlName="startDate" matStartDate placeholder="Start date">
+          <input formControlName="endDate" matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+    <button type="submit" class="btn btn-primary">Publish survey</button>
   </form>
 </div>

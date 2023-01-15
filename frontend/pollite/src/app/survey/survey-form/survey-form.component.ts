@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {Survey, SurveyQuestion, SurveyQuestionAnswer} from "../../model/Survey";
 import {SurveyService} from "../service/survey.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-survey-form',
@@ -13,14 +14,18 @@ export class SurveyFormComponent implements OnInit {
   form: FormGroup;
 
   constructor(private fb: FormBuilder,
-              private surveyService: SurveyService) {
+              private surveyService: SurveyService,
+              private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       description: '',
       questions: this.fb.array([this.newQuestion()]),
-      exclusions: this.fb.array([])
+      exclusions: this.fb.array([]),
+      isActive: true,
+      startDate: null,
+      endDate: null
     });
   }
 
@@ -41,6 +46,10 @@ export class SurveyFormComponent implements OnInit {
   }
 
   removeQuestion(questionIndex: number) {
+    if (this.questionForms.length === 1) {
+      this.toastr.error("Survey must contain at least 1 question!");
+      return;
+    }
     this.questionForms.removeAt(questionIndex);
   }
 
@@ -49,7 +58,12 @@ export class SurveyFormComponent implements OnInit {
   }
 
   removeAnswerFromQuestion(questionIndex: number, answerIndex: number) {
-    this.questionAnswerForms(questionIndex).removeAt(answerIndex);
+    const answers = this.questionAnswerForms(questionIndex);
+    if (answers.length === 2) {
+      this.toastr.error("Question must have at least 2 answers!")
+      return;
+    }
+    answers.removeAt(answerIndex);
   }
 
   addExclusion() {
@@ -113,7 +127,9 @@ export class SurveyFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.surveyService.createSurvey(this.buildSurveyFromForm()).subscribe();
+    this.surveyService.createSurvey(this.buildSurveyFromForm()).subscribe(response => {
+      this.toastr.success("Survey published!");
+    });
   }
 
   private swap(arr: any[], index1: number, index2: number): any[] {
@@ -151,6 +167,9 @@ export class SurveyFormComponent implements OnInit {
       questions: this.form.get('questions')?.value
         .map((question: any, index: number) => this.buildQuestionFromForm(question, index)),
       configuration: {
+        isActive: this.form.get('isActive')?.value,
+        startDate: this.form.get('startDate')?.value,
+        endDate: this.form.get('endDate')?.value,
         exclusions: this.form.get('exclusions')?.value
       }
     } as Survey
