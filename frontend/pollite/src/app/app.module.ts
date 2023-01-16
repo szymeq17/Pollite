@@ -37,6 +37,9 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {ToastrModule} from "ngx-toastr";
+import { CompleteSurveyFormComponent } from './survey/complete-survey-form/complete-survey-form.component';
+import {MatCardModule} from "@angular/material/card";
+import {MatRadioModule} from "@angular/material/radio";
 
 @NgModule({
   declarations: [
@@ -46,7 +49,8 @@ import {ToastrModule} from "ngx-toastr";
     PollItemComponent,
     PollsComponent,
     PollFormDialogComponent,
-    SurveyFormComponent
+    SurveyFormComponent,
+    CompleteSurveyFormComponent
   ],
     imports: [
         BrowserModule,
@@ -80,7 +84,9 @@ import {ToastrModule} from "ngx-toastr";
         MatDatepickerModule,
         MatNativeDateModule,
         BrowserAnimationsModule,
-        ToastrModule.forRoot()
+        ToastrModule.forRoot(),
+        MatCardModule,
+        MatRadioModule
     ],
   providers: [],
   bootstrap: [AppComponent]

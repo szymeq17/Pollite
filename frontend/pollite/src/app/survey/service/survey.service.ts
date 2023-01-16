@@ -14,4 +14,9 @@ export class SurveyService {
     const headers = new HttpHeaders({Authorization: 'Basic ' + btoa('admin:admin')});
     return this.http.post(this.SURVEY_API_PATH, survey, {headers: headers});
   }
+
+  public getSurvey(surveyId: number): Observable<Survey> {
+    //const headers = new HttpHeaders({Authorization: 'Basic ' + btoa('admin:admin')});
+    return this.http.get<Survey>(this.SURVEY_API_PATH + `/${surveyId}`);
+  }
 }

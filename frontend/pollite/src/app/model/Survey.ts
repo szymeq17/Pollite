@@ -3,6 +3,7 @@ export interface Survey {
   ownerUsername?: string,
   questions: SurveyQuestion[]
   configuration?: SurveyConfiguration
+  description?: string
 }
 
 export interface SurveyQuestion {

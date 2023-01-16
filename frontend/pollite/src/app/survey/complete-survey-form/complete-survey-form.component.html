@@ -1,0 +1,35 @@
+<div class="container">
+  <form [formGroup]="form" class="form" (ngSubmit)="onSubmit()">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Survey by {{survey.ownerUsername}}</mat-card-title>
+        <mat-card-subtitle>{{survey.description}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="card-content">
+        <div formArrayName="completedQuestions" class="questions-container">
+          <div *ngFor="let question of survey.questions; let questionIndex=index" [formGroupName]="questionIndex" class="question-container">
+            <div class="question-info">
+              <div class="question-number">{{question.order}}</div>
+              <div class="question-text">{{question.text}}</div>
+            </div>
+            <div class="answers-container">
+              <div *ngIf="question.type === 'MULTI_CHOICE'; else singleChoice">
+                <div *ngFor="let answer of question.answers" class="multi-choice-answer">
+                  <mat-checkbox>{{answer.text}}</mat-checkbox>
+                </div>
+              </div>
+              <ng-template #singleChoice>
+                <mat-radio-group class="single-choice-answer">
+                  <mat-radio-button *ngFor="let answer of question.answers" [value]="[answer.id]">
+                    {{answer.text}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </mat-card-content>
+    </mat-card>
+  </form>
+</div>
