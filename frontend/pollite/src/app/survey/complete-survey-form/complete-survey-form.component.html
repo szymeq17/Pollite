@@ -15,12 +15,14 @@
             <div class="answers-container">
               <div *ngIf="question.type === 'MULTI_CHOICE'; else singleChoice">
                 <div *ngFor="let answer of question.answers" class="multi-choice-answer">
-                  <mat-checkbox>{{answer.text}}</mat-checkbox>
+                  <mat-checkbox [value]="answer.id ? answer.id.toString() : ''" (change)="onCheckboxChange($event, questionIndex)">
+                    {{answer.text}}
+                  </mat-checkbox>
                 </div>
               </div>
               <ng-template #singleChoice>
                 <mat-radio-group class="single-choice-answer">
-                  <mat-radio-button *ngFor="let answer of question.answers" [value]="[answer.id]">
+                  <mat-radio-button *ngFor="let answer of question.answers" [value]="[answer.id]" (change)="onRadioChange($event, questionIndex)">
                     {{answer.text}}
                   </mat-radio-button>
                 </mat-radio-group>
