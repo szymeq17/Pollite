@@ -19,6 +19,7 @@ public class SecurityConfiguration {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/register/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/survey/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/survey/submit").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/poll/**").permitAll()
                 .anyRequest()
                 .authenticated()

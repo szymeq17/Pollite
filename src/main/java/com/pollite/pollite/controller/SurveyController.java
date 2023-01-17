@@ -29,9 +29,9 @@ public class SurveyController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void createSurvey(@Valid @RequestBody SurveyDto surveyDto, Principal principal)
+    public Long createSurvey(@Valid @RequestBody SurveyDto surveyDto, Principal principal)
             throws UserDoesNotExistException {
-        surveyService.addSurvey(surveyDto, principal);
+        return surveyService.addSurvey(surveyDto, principal);
     }
 
     @GetMapping("/{surveyId}")

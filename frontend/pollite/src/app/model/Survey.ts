@@ -2,7 +2,7 @@ export interface Survey {
   id?: number,
   ownerUsername?: string,
   questions: SurveyQuestion[]
-  configuration?: SurveyConfiguration
+  configuration: SurveyConfiguration
   description?: string
 }
 
@@ -25,7 +25,7 @@ export interface SurveyConfiguration {
   isActive?: boolean,
   startDate?: Date,
   endDate?: Date,
-  exclusions?: SurveyQuestionExclusion[]
+  exclusions: SurveyQuestionExclusion[]
 }
 
 export interface SurveyQuestionExclusion {

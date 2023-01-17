@@ -3,6 +3,7 @@ import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {Survey, SurveyQuestion, SurveyQuestionAnswer} from "../../model/Survey";
 import {SurveyService} from "../service/survey.service";
 import {ToastrService} from "ngx-toastr";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-survey-form',
@@ -15,6 +16,7 @@ export class SurveyFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private surveyService: SurveyService,
+              private router: Router,
               private toastr: ToastrService) {
   }
 
@@ -129,6 +131,7 @@ export class SurveyFormComponent implements OnInit {
   onSubmit() {
     this.surveyService.createSurvey(this.buildSurveyFromForm()).subscribe(response => {
       this.toastr.success("Survey published!");
+      this.router.navigate([`/survey/${response}`]);
     });
   }
 
@@ -170,7 +173,7 @@ export class SurveyFormComponent implements OnInit {
         isActive: this.form.get('isActive')?.value,
         startDate: this.form.get('startDate')?.value,
         endDate: this.form.get('endDate')?.value,
-        exclusions: this.form.get('exclusions')?.value
+        exclusions: this.form.get('exclusions')?.value || []
       }
     } as Survey
   }

@@ -1,25 +1,16 @@
 package com.pollite.pollite.service.survey;
 
-import com.pollite.pollite.dto.CompletedSurveyDto;
 import com.pollite.pollite.dto.SurveyDto;
-import com.pollite.pollite.dto.mapper.CompletedSurveyMapper;
 import com.pollite.pollite.dto.mapper.SurveyMapper;
-import com.pollite.pollite.exception.InvalidCompletedSurveyException;
-import com.pollite.pollite.exception.SurveyDoesNotExistException;
-import com.pollite.pollite.exception.SurveyNotActiveException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
-import com.pollite.pollite.model.survey.Survey;
 import com.pollite.pollite.model.survey.SurveyConfiguration;
-import com.pollite.pollite.repository.CompletedSurveyRepository;
 import com.pollite.pollite.repository.SurveyRepository;
 import com.pollite.pollite.service.poll.UserService;
-import com.pollite.pollite.validator.CompletedSurveyValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.Clock;
-import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Service
@@ -34,7 +25,7 @@ public class SurveyService {
 
     private final Clock clok;
 
-    public void addSurvey(SurveyDto surveyDto, Principal principal) throws UserDoesNotExistException {
+    public Long addSurvey(SurveyDto surveyDto, Principal principal) throws UserDoesNotExistException {
         var owner = userService.findUserByUsername(principal.getName());
         var survey = surveyMapper.fromDto(surveyDto);
         survey.setOwner(owner);
@@ -43,7 +34,8 @@ public class SurveyService {
             survey.setConfiguration(createDefaultConfiguration());
         }
 
-        surveyRepository.save(survey);
+        var createdSurvey = surveyRepository.save(survey);
+        return createdSurvey.getId();
     }
 
     public Optional<SurveyDto> findSurvey(Long id) {

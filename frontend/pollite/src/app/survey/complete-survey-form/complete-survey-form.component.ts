@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {SurveyService} from "../service/survey.service";
 import {Survey, SurveyQuestion} from "../../model/Survey";
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {MatRadioChange} from "@angular/material/radio";
+import {CompletedSurvey, CompletedSurveyQuestion} from "../../model/CompletedSurvey";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-complete-survey-form',
@@ -15,8 +17,12 @@ export class CompleteSurveyFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private route: ActivatedRoute,
-              private surveyService: SurveyService) { }
+              private surveyService: SurveyService,
+              private router: Router,
+              private toastr: ToastrService) { }
   survey: Survey;
+  questionsToAnswer: SurveyQuestion[];
+  excludedQuestionsOrders: number[] = [];
   form: FormGroup = new FormGroup({});
 
   ngOnInit(): void {
@@ -25,6 +31,7 @@ export class CompleteSurveyFormComponent implements OnInit {
       this.surveyService.getSurvey(surveyId).subscribe(response => {
         this.survey = response;
         this.survey.description = "Przykładowy opis ankiety. Bla bla bla bla";
+        this.questionsToAnswer = response.questions;
 
         this.form = this.fb.group({
           surveyId: surveyId,
@@ -43,7 +50,10 @@ export class CompleteSurveyFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.form.value);
+    console.log(this.buildCompletedSurveyFromForm())
+    this.surveyService.submitCompletedSurvey(this.buildCompletedSurveyFromForm()).subscribe(response => {
+      this.toastr.success("Survey submitted!");
+    })
   }
 
   onCheckboxChange(e: MatCheckboxChange, questionIndex: number) {
@@ -61,12 +71,14 @@ export class CompleteSurveyFormComponent implements OnInit {
         i++;
       })
     }
+    this.updateQuestionsToAnswer();
   }
 
   onRadioChange(e: MatRadioChange, questionIndex: number) {
     const answers: FormArray = this.completedQuestionAnswersForms(questionIndex);
     answers.clear();
     answers.push(new FormControl(e.value));
+    this.updateQuestionsToAnswer();
   }
 
   private buildQuestionGroups(): FormGroup[] {
@@ -81,6 +93,53 @@ export class CompleteSurveyFormComponent implements OnInit {
       type: question.type,
       answers: this.fb.array([])
     });
+  }
+
+  private updateQuestionsToAnswer() {
+    const exclusions = this.survey.configuration.exclusions;
+    const questionOrdersToRemove = exclusions
+      .filter(exclusion => this.isAnswerChecked(exclusion.questionOrder, exclusion.answerOrder))
+      .map(exclusion => exclusion.excludedQuestionOrder);
+
+    this.questionsToAnswer = this.survey.questions.filter(question => !questionOrdersToRemove.includes(question.order));
+    this.excludedQuestionsOrders = questionOrdersToRemove;
+  }
+
+  private isAnswerChecked(questionOrder: number, answerOrder: number): boolean {
+    const completedQuestions = this.completedQuestionForms.controls;
+    return completedQuestions.some(control => this.hasQuestionAnswerChecked(control, questionOrder, answerOrder));
+  }
+
+  private hasQuestionAnswerChecked(question: AbstractControl, questionOrder: number, answerOrder: number): boolean {
+    const answeredQuestionOrder = question.get('order')?.value as number;
+    if (questionOrder !== answeredQuestionOrder) {
+      return false;
+    }
+    const answers = question.get('answers') as FormArray;
+    return answers.controls.some(answer => this.findAnswerOrderById(questionOrder, answer.value) === answerOrder);
+  }
+
+  private findAnswerOrderById(questionOrder: number, answerId: number): number | null | undefined {
+    const question = this.survey.questions.find(question => question.order === questionOrder);
+    return question ? question.answers.find(answer => answer.id === answerId)?.order : null;
+  }
+
+  private buildCompletedSurveyFromForm(): CompletedSurvey {
+    return {
+      surveyId: this.survey.id,
+      completedQuestions: this.form.get('completedQuestions')?.value
+        .filter(
+          (question: any) =>
+            !this.excludedQuestionsOrders.includes(question.order))
+        .map((question: SurveyQuestion) => this.buildCompletedQuestionFromForm(question))
+    } as CompletedSurvey;
+  }
+
+  private buildCompletedQuestionFromForm(question: any): CompletedSurveyQuestion {
+    return {
+      questionId: question.questionId,
+      questionAnswerIds: question.answers
+    } as CompletedSurveyQuestion;
   }
 
 }
