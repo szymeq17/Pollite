@@ -2,6 +2,7 @@ package com.pollite.pollite.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -17,8 +18,10 @@ public class SecurityConfiguration {
         http.authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/register/**").permitAll()
-//                .anyRequest()
-//                .authenticated()
+                .antMatchers(HttpMethod.GET,"/api/survey/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/poll/**").permitAll()
+                .anyRequest()
+                .authenticated()
                 .and()
                 .cors()
                 .and()
@@ -28,9 +31,7 @@ public class SecurityConfiguration {
                 .frameOptions()
                 .disable()
                 .and()
-                .httpBasic()
-                .and()
-                .formLogin();
+                .httpBasic();
         return http.build();
     }
 
