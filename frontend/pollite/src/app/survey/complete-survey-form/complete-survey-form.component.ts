@@ -45,19 +45,36 @@ export class CompleteSurveyFormComponent implements OnInit {
     return this.form.get('completedQuestions') as FormArray;
   }
 
-  completedQuestionAnswersForms(questionIndex: number): FormArray {
-    return this.completedQuestionForms.at(questionIndex).get('answers') as FormArray
+  completedQuestionAnswersForms(questionOrder: number): FormArray {
+    const question = this.completedQuestionForms.controls
+      .find(control => control.get('order')?.value === questionOrder);
+    if (question) {
+      return question.get('answers') as FormArray
+    }
+    return this.fb.array([]);
   }
 
   onSubmit() {
-    console.log(this.buildCompletedSurveyFromForm())
-    this.surveyService.submitCompletedSurvey(this.buildCompletedSurveyFromForm()).subscribe(response => {
-      this.toastr.success("Survey submitted!");
-    })
+    const completedSurvey = this.buildCompletedSurveyFromForm();
+    const unansweredQuestionsNumbers = this.findUnansweredQuestionsNumbers(completedSurvey);
+
+    if (unansweredQuestionsNumbers.length > 0) {
+      const unanswered = unansweredQuestionsNumbers.join(', ')
+      this.toastr.error(`You must answer all questions! Unanswered questions: ${unanswered}`);
+      return;
+    }
+    this.surveyService.submitCompletedSurvey(this.buildCompletedSurveyFromForm()).subscribe(
+      _ => {
+        this.toastr.success("Survey submitted!");
+        this.router.navigate(['/']);
+      },
+      _ => {
+        this.toastr.error("Oops! Internal server error occured!");
+      });
   }
 
-  onCheckboxChange(e: MatCheckboxChange, questionIndex: number) {
-    const answers: FormArray = this.completedQuestionAnswersForms(questionIndex);
+  onCheckboxChange(e: MatCheckboxChange, questionOrder: number) {
+    const answers: FormArray = this.completedQuestionAnswersForms(questionOrder);
     const value: number = Number.parseInt(e.source.value);
     if (e.checked) {
       answers.push(new FormControl(value));
@@ -74,8 +91,8 @@ export class CompleteSurveyFormComponent implements OnInit {
     this.updateQuestionsToAnswer();
   }
 
-  onRadioChange(e: MatRadioChange, questionIndex: number) {
-    const answers: FormArray = this.completedQuestionAnswersForms(questionIndex);
+  onRadioChange(e: MatRadioChange, questionOrder: number) {
+    const answers: FormArray = this.completedQuestionAnswersForms(questionOrder);
     answers.clear();
     answers.push(new FormControl(e.value));
     this.updateQuestionsToAnswer();
@@ -140,6 +157,19 @@ export class CompleteSurveyFormComponent implements OnInit {
       questionId: question.questionId,
       questionAnswerIds: question.answers
     } as CompletedSurveyQuestion;
+  }
+
+  private findUnansweredQuestionsNumbers(completedSurvey: CompletedSurvey): number[] {
+    console.log(completedSurvey.completedQuestions)
+    return completedSurvey.completedQuestions
+      .filter(question => question.questionAnswerIds.length === 0)
+      .map(question => this.getQuestionOrderById(question.questionId))
+      .filter(order => order !== 0)
+  }
+
+  private getQuestionOrderById(questionId: number) {
+    const question = this.survey.questions.find(question => question.id === questionId);
+    return question ? question.order || 0 : 0;
   }
 
 }
