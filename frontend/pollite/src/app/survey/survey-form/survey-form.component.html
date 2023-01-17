@@ -1,5 +1,5 @@
 <div class="container">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form" ngNativeValidate>
     <h2>Description</h2>
     <mat-form-field>
       <textarea matInput placeholder="Your survey description..." formControlName="description" required></textarea>
