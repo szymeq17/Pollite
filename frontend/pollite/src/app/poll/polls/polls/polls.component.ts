@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {Poll} from "../../../model/Poll";
-import {PollService} from "../../service/poll.service";
+import {PollService} from "../../../service/poll.service";
 import {MatPaginator} from "@angular/material/paginator";
 import {tap} from "rxjs";
 

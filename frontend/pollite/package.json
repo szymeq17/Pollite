@@ -29,6 +29,7 @@
     "mdb-angular-ui-kit": "^2.3.0",
     "ngx-toastr": "^14.3.0",
     "rxjs": "~7.5.0",
+    "source-map-support": "^0.5.21",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

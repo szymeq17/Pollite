@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {SurveyService} from "../service/survey.service";
+import {SurveyService} from "../../service/survey.service";
 import {Survey, SurveyQuestion} from "../../model/Survey";
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {MatCheckboxChange} from "@angular/material/checkbox";

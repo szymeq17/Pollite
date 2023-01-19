@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
-import {Constants} from "../../config/constants";
+import {Constants} from "../config/constants";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Survey} from "../../model/Survey";
-import {CompletedSurvey} from "../../model/CompletedSurvey";
+import {Survey} from "../model/Survey";
+import {CompletedSurvey} from "../model/CompletedSurvey";
 
 @Injectable({providedIn: 'root'})
 export class SurveyService {

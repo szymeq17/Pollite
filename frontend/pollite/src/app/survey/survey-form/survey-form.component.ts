@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {Survey, SurveyQuestion, SurveyQuestionAnswer} from "../../model/Survey";
-import {SurveyService} from "../service/survey.service";
+import {SurveyService} from "../../service/survey.service";
 import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
 
