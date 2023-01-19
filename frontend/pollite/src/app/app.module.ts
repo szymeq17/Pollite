@@ -24,7 +24,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PaginationComponent } from './pagination/pagination.component';
 import { PollItemComponent } from './poll/poll-item/poll-item.component';
 import { PollsComponent } from './poll/polls/polls/polls.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import { PollFormDialogComponent } from './poll/poll-form-dialog/poll-form-dialog.component';
@@ -40,6 +40,8 @@ import {ToastrModule} from "ngx-toastr";
 import { CompleteSurveyFormComponent } from './survey/complete-survey-form/complete-survey-form.component';
 import {MatCardModule} from "@angular/material/card";
 import {MatRadioModule} from "@angular/material/radio";
+import {AuthInterceptor} from "./auth/auth.interceptor";
+import { LoginComponent } from './login/login/login.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,8 @@ import {MatRadioModule} from "@angular/material/radio";
     PollsComponent,
     PollFormDialogComponent,
     SurveyFormComponent,
-    CompleteSurveyFormComponent
+    CompleteSurveyFormComponent,
+    LoginComponent
   ],
     imports: [
         BrowserModule,
@@ -88,7 +91,11 @@ import {MatRadioModule} from "@angular/material/radio";
         MatCardModule,
         MatRadioModule
     ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

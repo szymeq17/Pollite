@@ -1,5 +1,6 @@
 package com.pollite.pollite.service.poll;
 
+import com.pollite.pollite.dto.UserDto;
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.model.auth.User;
 import com.pollite.pollite.repository.UserRepository;
@@ -21,6 +22,14 @@ public class UserService {
             newUser.setPassword(encodedPassword);
             userRepository.save(newUser);
         }
+    }
+
+    public UserDto authenticateUser(UserDto userDto) {
+        var user = findUserByUsername(userDto.getUsername());
+        if (passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
+            return userDto;
+        }
+        throw new UserDoesNotExistException(userDto.getUsername());
     }
 
     public User findUserByUsername(String username) throws UserDoesNotExistException {
