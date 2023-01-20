@@ -160,7 +160,6 @@ export class CompleteSurveyFormComponent implements OnInit {
   }
 
   private findUnansweredQuestionsNumbers(completedSurvey: CompletedSurvey): number[] {
-    console.log(completedSurvey.completedQuestions)
     return completedSurvey.completedQuestions
       .filter(question => question.questionAnswerIds.length === 0)
       .map(question => this.getQuestionOrderById(question.questionId))

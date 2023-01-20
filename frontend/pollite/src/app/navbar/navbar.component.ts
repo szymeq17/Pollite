@@ -25,7 +25,6 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    console.log("dupa")
     this.authService.logout();
   }
 

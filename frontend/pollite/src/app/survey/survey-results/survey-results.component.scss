@@ -1,0 +1,201 @@
+@import "src/styles";
+
+.container {
+  margin-top: 20px;
+  width: 90%;
+}
+
+.main-container {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-areas:
+    "results results filters";
+}
+
+.survey-id {
+  color: $pollite-primary-color;
+}
+
+.results-container {
+  grid-area: results;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.question-result {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+  border-radius: 10px;
+  padding: 20px;
+  gap: 0.8rem;
+}
+
+.question-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.question-text {
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.question-votes-total {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $pollite-primary-color;
+  color: white;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+}
+
+.votes-desc {
+  font-size: 0.7rem;
+}
+
+.question-votes-total-value {
+  font-weight: bold;
+}
+
+.answers-results-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.answer-result {
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.answer-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.answer-summary {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.answer-votes-total {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $pollite-primary-color;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+}
+
+.answer-votes-total-value {
+  font-weight: bold;
+}
+
+.answer-votes-desc {
+  font-size: 0.6rem;
+}
+
+.answer-votes-percent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $pollite-primary-color;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+}
+
+.filters-block-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  grid-area: filters;
+}
+
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.add-filter-btn {
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+}
+
+.add-filter-symbol {
+  transform: scale(1.5);
+}
+
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+  border-radius: 10px;
+  padding: 15px;
+  height: 100%;
+  gap: 0.6rem;
+}
+
+.filter-controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.apply-btn {
+  border: 0;
+  background-color: $pollite-primary-color;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+}
+
+.apply-btn:hover {
+  background-color: darken($pollite-primary-color, 7.5%);
+}
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.remove-filter-btn {
+  background-color: $pollite-primary-color;
+  border-radius: 5px;
+  border: 0;
+  width: 40%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+}
+
+.remove-filter-btn:hover {
+  background-color: darken($pollite-primary-color, 7.5%);
+}
+
+.filter-select {
+  width: 100%;
+}
+

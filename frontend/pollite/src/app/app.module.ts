@@ -42,6 +42,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatRadioModule} from "@angular/material/radio";
 import {AuthInterceptor} from "./auth/auth.interceptor";
 import { LoginComponent } from './login/login/login.component';
+import { SurveyResultsComponent } from './survey/survey-results/survey-results.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { LoginComponent } from './login/login/login.component';
     PollFormDialogComponent,
     SurveyFormComponent,
     CompleteSurveyFormComponent,
-    LoginComponent
+    LoginComponent,
+    SurveyResultsComponent
   ],
     imports: [
         BrowserModule,

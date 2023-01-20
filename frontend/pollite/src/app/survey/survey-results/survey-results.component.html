@@ -1,0 +1,79 @@
+<ng-container *ngIf="survey">
+  <div class="container">
+    <mat-card>
+      <mat-card-content>
+        <div class="main-container">
+          <div class="results-container">
+            <h2>
+              Survey <a class="survey-id" href="/survey/{{survey.id}}">#{{survey.id}}</a> results
+            </h2>
+            <div *ngFor="let questionResult of surveyResults.questionsResults" class="question-result">
+              <div class="question-info">
+                <div class="question-text">
+                  {{ questionResult.questionText }}
+                </div>
+                <div class="question-votes-total">
+                  <div class="question-votes-total-value">
+                    500
+                  </div>
+                  <div class="votes-desc">VOTES</div>
+                </div>
+              </div>
+              <div class="answers-results-container">
+                <div *ngFor="let answerResult of questionResult.answersResults" class="answer-result">
+                  <div class="answer-text">
+                    {{ answerResult.answerText }}
+                  </div>
+                  <div class="answer-summary">
+                    <div class="answer-votes-total">
+                      <div class="answer-votes-total-value">
+                        {{ answerResult.total }}
+                      </div>
+                      <div class="answer-votes-desc">{{ answerResult.total === 1 ? "VOTE" : "VOTES" }}</div>
+                    </div>
+                    <div class="answer-votes-percent">
+                      45%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <form [formGroup]="form" class="filters-block-container">
+            <h2>Filters</h2>
+            <div formArrayName="filters" class="filters-container">
+              <div class="filter-controls">
+                <button (click)="applyFilters()" class="apply-btn">Apply</button>
+                <button (click)="addFilter()" class="add-filter-btn">
+                  <mat-icon class="add-filter-symbol" [ngStyle]="{'color':'#D00224'}">add_box</mat-icon>
+                </button>
+              </div>
+              <div *ngFor="let filter of filtersForm.controls; let filterIndex=index" [formGroupName]="filterIndex" class="filter">
+                <mat-form-field class="filter-select" appearance="fill">
+                  <mat-label>Question</mat-label>
+                  <select formControlName="questionId" matNativeControl required>
+                    <option *ngFor="let question of survey.questions" [value]="question.id">
+                      {{ question.text }}
+                    </option>
+                  </select>
+                </mat-form-field>
+                <mat-form-field class="filter-select" appearance="fill">
+                  <mat-label>Answer</mat-label>
+                  <select formControlName="answerId" matNativeControl required>
+                    <option *ngFor="let answer of getAnswersForSelectedQuestion(filterIndex)" [value]="answer.id">
+                      {{ answer.text }}
+                    </option>
+                  </select>
+                </mat-form-field>
+                <button (click)="removeFilter(filterIndex)" class="remove-filter-btn">
+                  <mat-icon [ngStyle]="{'color':'white'}">delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</ng-container>

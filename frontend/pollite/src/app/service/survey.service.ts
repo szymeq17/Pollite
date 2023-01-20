@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Survey} from "../model/Survey";
 import {CompletedSurvey} from "../model/CompletedSurvey";
+import {SurveyResults} from "../model/SurveyResults";
 
 @Injectable({providedIn: 'root'})
 export class SurveyService {
@@ -21,5 +22,9 @@ export class SurveyService {
 
   public submitCompletedSurvey(completedSurvey: CompletedSurvey): Observable<any> {
     return this.http.post(this.SURVEY_API_PATH + "/submit", completedSurvey);
+  }
+
+  public getSurveyResults(surveyId: number, filters: any): Observable<SurveyResults> {
+    return this.http.post<SurveyResults>(this.SURVEY_API_PATH + `/${surveyId}/results`, filters);
   }
 }
