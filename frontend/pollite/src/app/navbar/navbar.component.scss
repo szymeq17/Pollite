@@ -1,0 +1,58 @@
+@import "src/styles";
+
+.login-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  background-color: transparent;
+  border: 0;
+  color: $pollite-primary-color;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.login-btn:hover {
+  background-color: #efefef;
+}
+
+.username {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+}
+
+.username:hover {
+  background-color: #efefef;
+}
+
+.logout-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  gap: 0.3rem;
+  color: $pollite-primary-color;
+}
+
+.logout-btn:hover {
+  background-color: #efefef;
+}
+
+.user-controls {
+  gap: 1rem;
+}
+
+.menu-item {
+  font-size: 1rem;
+}

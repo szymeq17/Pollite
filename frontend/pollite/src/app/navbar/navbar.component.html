@@ -33,15 +33,38 @@
       <!-- Left links -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="">Home</a>
+          <a class="nav-link active menu-item" aria-current="page" href="">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="polls">Polls</a>
+          <a class="nav-link active menu-item" aria-current="page" href="/polls">Polls</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="survey">Create survey</a>
+          <a class="nav-link active menu-item" aria-current="page" href="/survey">Create survey</a>
         </li>
       </ul>
+
+      <div *ngIf="!user; else notLoggedIn" class="d-flex align-items-center">
+        <div class="login-btn" (click)="goToLoginPage()">
+          <mat-icon [ngStyle]="{'color':'#D00224'}" class="logout-btn">login</mat-icon>
+          <div>
+            Sign in
+          </div>
+        </div>
+      </div>
+      <ng-template class="d-flex align-items-center user-controls" #notLoggedIn>
+        <div class="username">
+          <mat-icon [ngStyle]="{'color':'#D00224'}">person</mat-icon>
+          <div>
+            {{ user.username }}
+          </div>
+        </div>
+        <div class="logout-btn" (click)="logout()">
+          <mat-icon [ngStyle]="{'color':'#D00224'}" class="logout-btn">logout</mat-icon>
+          <div>
+            Sign out
+          </div>
+        </div>
+      </ng-template>
     </div>
   </div>
 </nav>
