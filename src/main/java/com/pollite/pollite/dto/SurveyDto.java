@@ -13,6 +13,8 @@ public class SurveyDto {
 
     private String ownerUsername;
 
+    private String description;
+
     private List<SurveyQuestionDto> questions;
 
     private SurveyConfigurationDto configuration;

@@ -28,6 +28,9 @@ public class Survey {
     @JoinColumn(name = "fk_owner")
     private User owner;
 
+    @Column(name = "description")
+    private String description;
+
     @OrderBy("order ASC")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SurveyQuestion> questions = new ArrayList<>();

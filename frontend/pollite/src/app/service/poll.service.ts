@@ -21,4 +21,12 @@ export class PollService {
   public vote(pollId: number | undefined, answerId: number | undefined): Observable<PollResults> {
     return this.http.post<PollResults>(`${this.POLL_API_PATH}/${pollId}/vote/${answerId}`, {})
   }
+
+  public getUsersPolls(username: string, page: number, pageSize: number): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', pageSize);
+
+    return this.http.get(this.POLL_API_PATH + `/users/${username}`);
+  }
 }

@@ -167,6 +167,7 @@ export class SurveyFormComponent implements OnInit {
 
   private buildSurveyFromForm(): Survey {
     return {
+      description: this.form.get('description')?.value,
       questions: this.form.get('questions')?.value
         .map((question: any, index: number) => this.buildQuestionFromForm(question, index)),
       configuration: {

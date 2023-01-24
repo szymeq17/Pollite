@@ -18,6 +18,7 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_survey"/>
             </column>
             <column name="fk_owner" type="BIGINT"/>
+            <column name="description" type="VARCHAR(255)"/>
             <column name="configuration_id" type="BIGINT"/>
         </createTable>
         <addForeignKeyConstraint baseColumnNames="configuration_id" baseTableName="survey" constraintName="FK_SURVEY_ON_CONFIGURATION" referencedColumnNames="id" referencedTableName="survey_configuration"/>

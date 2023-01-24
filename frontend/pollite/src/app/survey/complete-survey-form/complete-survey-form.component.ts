@@ -30,7 +30,6 @@ export class CompleteSurveyFormComponent implements OnInit {
       const surveyId = params['surveyId']
       this.surveyService.getSurvey(surveyId).subscribe(response => {
         this.survey = response;
-        this.survey.description = "Przykładowy opis ankiety. Bla bla bla bla";
         this.questionsToAnswer = response.questions;
 
         this.form = this.fb.group({
