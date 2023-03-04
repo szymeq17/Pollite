@@ -1,0 +1,8 @@
+<div class="container">
+  <div class="surveys-container">
+    <app-survey-info *ngFor="let surveyInfo of surveyInfos" [surveyInfo]="surveyInfo"></app-survey-info>
+  </div>
+  <div class="pagination">
+    <mat-paginator [length]="surveysTotal" [pageSize]="3" [pageSizeOptions]="[3, 5, 10]"></mat-paginator>
+  </div>
+</div>
