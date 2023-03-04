@@ -51,6 +51,10 @@ public class PollService {
         return pollRepository.findById(id).map(pollMapper::toDto);
     }
 
+    public Page<PollDto> findPollsByOwner(String username, Pageable pageable) {
+        return pollRepository.findAllByOwnerUsername(username, pageable).map(pollMapper::toDto);
+    }
+
     public Page<PollDto> getPolls(Pageable pageable) {
         return pollRepository.findAll(pageable).map(pollMapper::toDto);
     }

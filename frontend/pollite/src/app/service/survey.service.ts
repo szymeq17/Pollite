@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Constants} from "../config/constants";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Survey} from "../model/Survey";
 import {CompletedSurvey} from "../model/CompletedSurvey";
@@ -26,5 +26,13 @@ export class SurveyService {
 
   public getSurveyResults(surveyId: number, filters: any): Observable<SurveyResults> {
     return this.http.post<SurveyResults>(this.SURVEY_API_PATH + `/${surveyId}/results`, filters);
+  }
+
+  public getSurveyInfos(username: string, page: number, pageSize: number): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', pageSize);
+
+    return this.http.get(this.SURVEY_API_PATH + `/user/${username}`, {'params': params});
   }
 }

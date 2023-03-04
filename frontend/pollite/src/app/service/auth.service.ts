@@ -26,6 +26,10 @@ export class AuthService {
     return this.userSubject.value;
   }
 
+  public get userName(): string {
+    return this.userSubject.value.username;
+  }
+
   login(username: string, password: string) {
     return this.http.post<User>(`${Constants.API_ENDPOINT}auth/login`, { username, password })
       .pipe(map(user => {

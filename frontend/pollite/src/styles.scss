@@ -58,6 +58,9 @@ $theme-colors: (
       lighten($pollite-primary-color,5%),
       lighten($pollite-primary-color, 10%),
       color-contrast($pollite-primary-color),);
+
+  border-radius: 5px;
+  border: 0;
 }
 
 .btn-outline-primary {

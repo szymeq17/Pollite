@@ -7,10 +7,12 @@ import {CompleteSurveyFormComponent} from "./survey/complete-survey-form/complet
 import {LoginComponent} from "./login/login/login.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {SurveyResultsComponent} from "./survey/survey-results/survey-results.component";
+import {UserProfileComponent} from "./user/user-profile/user-profile.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'polls', component: PollsComponent },
+  { path: 'users/:username', component: UserProfileComponent },
   { path: 'survey', component: SurveyFormComponent, canActivate: [AuthGuard] },
   { path: 'survey/:surveyId', component: CompleteSurveyFormComponent},
   { path: 'survey/:surveyId/results', component: SurveyResultsComponent},

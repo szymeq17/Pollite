@@ -44,6 +44,11 @@ public class PollControler {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/users/{username}")
+    public ResponseEntity<Page<PollDto>> getUsersPolls(@PathVariable String username, Pageable pageable) {
+        return ResponseEntity.ok(pollService.findPollsByOwner(username, pageable));
+    }
+
     @DeleteMapping("/{pollId}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deletePoll(@PathVariable Long pollId, Principal principal) throws UserNotAuthorizedException, UserDoesNotExistException, PollDoesNotExistException {

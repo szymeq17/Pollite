@@ -3,6 +3,7 @@ package com.pollite.pollite.controller;
 import com.pollite.pollite.dto.CompletedSurveyDto;
 import com.pollite.pollite.dto.CompletedSurveyFilter;
 import com.pollite.pollite.dto.SurveyDto;
+import com.pollite.pollite.dto.SurveyInfoDto;
 import com.pollite.pollite.exception.InvalidCompletedSurveyException;
 import com.pollite.pollite.exception.SurveyDoesNotExistException;
 import com.pollite.pollite.exception.SurveyNotActiveException;
@@ -10,6 +11,8 @@ import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.service.survey.CompletedSurveyService;
 import com.pollite.pollite.service.survey.SurveyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,5 +56,12 @@ public class SurveyController {
                                               @RequestBody(required = false) List<CompletedSurveyFilter> filters)
             throws SurveyDoesNotExistException {
         return ResponseEntity.ok(completedSurveyService.getSurveyResults(surveyId, filters));
+    }
+
+    @GetMapping("/user/{username}")
+    public ResponseEntity<Page<SurveyInfoDto>> getUsersSurveyInfos(@PathVariable String username,
+                                                                   Pageable pageable,
+                                                                   Principal principal) {
+        return ResponseEntity.ok(surveyService.getUsersSurveyInfos(username, pageable, principal));
     }
 }

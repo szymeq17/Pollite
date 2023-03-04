@@ -27,6 +27,6 @@ export class PollService {
       .set('page', page)
       .set('size', pageSize);
 
-    return this.http.get(this.POLL_API_PATH + `/users/${username}`);
+    return this.http.get(this.POLL_API_PATH + `/users/${username}`, {'params': params});
   }
 }

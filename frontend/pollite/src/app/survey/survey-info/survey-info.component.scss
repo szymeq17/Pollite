@@ -1,0 +1,28 @@
+@import "src/styles";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+  border-radius: 10px;
+}
+
+.info-container {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.controls-container {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.id {
+  color: $pollite-primary-color;
+  font-weight: bold;
+}
+
+.description {
+  color: #7b7b7b;
+}

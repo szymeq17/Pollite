@@ -4,7 +4,9 @@
       <mat-tab label="Polls">
         <app-poll-item *ngFor="let poll of polls" [poll]="poll"></app-poll-item>
       </mat-tab>
-      <mat-tab label="Surveys"> Surveys </mat-tab>
+      <mat-tab label="Surveys">
+        <app-surveys-view></app-surveys-view>
+      </mat-tab>
     </mat-tab-group>
 
   </mat-card>

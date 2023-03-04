@@ -43,6 +43,10 @@ import {MatRadioModule} from "@angular/material/radio";
 import {AuthInterceptor} from "./auth/auth.interceptor";
 import { LoginComponent } from './login/login/login.component';
 import { SurveyResultsComponent } from './survey/survey-results/survey-results.component';
+import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import {MatTabsModule} from "@angular/material/tabs";
+import { SurveyInfoComponent } from './survey/survey-info/survey-info.component';
+import { SurveysViewComponent } from './survey/surveys-view/surveys-view.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +59,10 @@ import { SurveyResultsComponent } from './survey/survey-results/survey-results.c
     SurveyFormComponent,
     CompleteSurveyFormComponent,
     LoginComponent,
-    SurveyResultsComponent
+    SurveyResultsComponent,
+    UserProfileComponent,
+    SurveyInfoComponent,
+    SurveysViewComponent
   ],
     imports: [
         BrowserModule,
@@ -91,7 +98,8 @@ import { SurveyResultsComponent } from './survey/survey-results/survey-results.c
         BrowserAnimationsModule,
         ToastrModule.forRoot(),
         MatCardModule,
-        MatRadioModule
+        MatRadioModule,
+        MatTabsModule
     ],
   providers: [
     {

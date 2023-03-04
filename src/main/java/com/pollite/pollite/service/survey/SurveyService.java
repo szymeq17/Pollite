@@ -1,12 +1,17 @@
 package com.pollite.pollite.service.survey;
 
 import com.pollite.pollite.dto.SurveyDto;
+import com.pollite.pollite.dto.SurveyInfoDto;
 import com.pollite.pollite.dto.mapper.SurveyMapper;
 import com.pollite.pollite.exception.UserDoesNotExistException;
+import com.pollite.pollite.exception.UserNotAuthorizedException;
+import com.pollite.pollite.model.survey.Survey;
 import com.pollite.pollite.model.survey.SurveyConfiguration;
 import com.pollite.pollite.repository.SurveyRepository;
 import com.pollite.pollite.service.poll.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -42,9 +47,27 @@ public class SurveyService {
         return surveyRepository.findById(id).map(surveyMapper::toDto);
     }
 
+    public Page<SurveyInfoDto> getUsersSurveyInfos(String username, Pageable pageable, Principal principal) {
+        if (principal.getName().equals(username)) {
+            throw new UserNotAuthorizedException(principal.getName());
+        }
+
+        return surveyRepository.findAllByOwnerUsername(username, pageable).map(this::toSurveyInfoDto);
+    }
+
     private SurveyConfiguration createDefaultConfiguration() {
         return SurveyConfiguration.builder()
                 .isActive(true)
+                .build();
+    }
+
+    private SurveyInfoDto toSurveyInfoDto(Survey survey) {
+        return SurveyInfoDto.builder()
+                .surveyId(survey.getId())
+                .description(survey.getDescription())
+                .isActive(survey.getConfiguration().getIsActive())
+                .startDate(survey.getConfiguration().getStartDate())
+                .endDate(survey.getConfiguration().getEndDate())
                 .build();
     }
 }
