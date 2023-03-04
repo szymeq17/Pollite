@@ -27,6 +27,7 @@ export class SurveyFormComponent implements OnInit {
       this.surveyService.getSurvey(surveyId).subscribe(
         survey => this.form = this.buildFormFromSurvey(survey)
       );
+      localStorage.removeItem('surveyId');
     } else {
       this.form = this.fb.group({
         description: '',

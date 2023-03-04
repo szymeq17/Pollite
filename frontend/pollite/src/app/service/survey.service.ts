@@ -35,4 +35,8 @@ export class SurveyService {
 
     return this.http.get(this.SURVEY_API_PATH + `/user/${username}`, {'params': params});
   }
+
+  public deleteSurvey(surveyId: number) {
+    return this.http.delete(this.SURVEY_API_PATH + `/${surveyId}`);
+  }
 }

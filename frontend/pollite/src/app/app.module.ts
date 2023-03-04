@@ -47,6 +47,8 @@ import { UserProfileComponent } from './user/user-profile/user-profile.component
 import {MatTabsModule} from "@angular/material/tabs";
 import { SurveyInfoComponent } from './survey/survey-info/survey-info.component';
 import { SurveysViewComponent } from './survey/surveys-view/surveys-view.component';
+import { DeleteSurveyDialogComponent } from './survey/delete-survey-dialog/delete-survey-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -62,45 +64,47 @@ import { SurveysViewComponent } from './survey/surveys-view/surveys-view.compone
     SurveyResultsComponent,
     UserProfileComponent,
     SurveyInfoComponent,
-    SurveysViewComponent
+    SurveysViewComponent,
+    DeleteSurveyDialogComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        NgbModule,
-        MdbAccordionModule,
-        MdbCarouselModule,
-        MdbCheckboxModule,
-        MdbCollapseModule,
-        MdbDropdownModule,
-        MdbFormsModule,
-        MdbModalModule,
-        MdbPopoverModule,
-        MdbRadioModule,
-        MdbRangeModule,
-        MdbRippleModule,
-        MdbScrollspyModule,
-        MdbTabsModule,
-        MdbTooltipModule,
-        MdbValidationModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        FormsModule,
-        MatPaginatorModule,
-        MatFormFieldModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatIconModule,
-        MatCheckboxModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        BrowserAnimationsModule,
-        ToastrModule.forRoot(),
-        MatCardModule,
-        MatRadioModule,
-        MatTabsModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    NgbModule,
+    MdbAccordionModule,
+    MdbCarouselModule,
+    MdbCheckboxModule,
+    MdbCollapseModule,
+    MdbDropdownModule,
+    MdbFormsModule,
+    MdbModalModule,
+    MdbPopoverModule,
+    MdbRadioModule,
+    MdbRangeModule,
+    MdbRippleModule,
+    MdbScrollspyModule,
+    MdbTabsModule,
+    MdbTooltipModule,
+    MdbValidationModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    FormsModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    MatCardModule,
+    MatRadioModule,
+    MatTabsModule,
+    MatDialogModule
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true

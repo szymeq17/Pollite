@@ -44,6 +44,11 @@ public class SurveyController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @DeleteMapping("/{surveyId}")
+    public void deleteSurvey(@PathVariable Long surveyId, Principal principal) {
+        surveyService.deleteSurvey(surveyId, principal);
+    }
+
     @PostMapping("/submit")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void submitCompletedSurvey(@Valid @RequestBody CompletedSurveyDto completedSurveyDto)

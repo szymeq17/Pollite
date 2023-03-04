@@ -3,6 +3,7 @@ package com.pollite.pollite.service.survey;
 import com.pollite.pollite.dto.SurveyDto;
 import com.pollite.pollite.dto.SurveyInfoDto;
 import com.pollite.pollite.dto.mapper.SurveyMapper;
+import com.pollite.pollite.exception.SurveyDoesNotExistException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.exception.UserNotAuthorizedException;
 import com.pollite.pollite.model.survey.Survey;
@@ -43,12 +44,24 @@ public class SurveyService {
         return createdSurvey.getId();
     }
 
+    public void deleteSurvey(Long surveyId, Principal principal) {
+        var username = principal.getName();
+        var survey = surveyRepository.findById(surveyId)
+                .orElseThrow(() -> new SurveyDoesNotExistException(surveyId));
+
+        if (!survey.getOwner().getUsername().equals(username)) {
+            throw new UserNotAuthorizedException(username);
+        }
+
+        surveyRepository.deleteById(surveyId);
+    }
+
     public Optional<SurveyDto> findSurvey(Long id) {
         return surveyRepository.findById(id).map(surveyMapper::toDto);
     }
 
     public Page<SurveyInfoDto> getUsersSurveyInfos(String username, Pageable pageable, Principal principal) {
-        if (principal.getName().equals(username)) {
+        if (!principal.getName().equals(username)) {
             throw new UserNotAuthorizedException(principal.getName());
         }
 
