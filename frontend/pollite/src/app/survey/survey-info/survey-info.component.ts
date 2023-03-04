@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {SurveyInfo} from "../../model/SurveyInfo";
 
 @Component({
@@ -15,6 +15,11 @@ export class SurveyInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  editSurvey() {
+    localStorage.setItem('surveyId', this.surveyInfo.surveyId.toString());
+    this.router.navigate(['/survey'])
   }
 
   showResulsts() {

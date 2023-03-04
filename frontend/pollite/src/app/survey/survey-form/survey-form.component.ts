@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
-import {Survey, SurveyQuestion, SurveyQuestionAnswer} from "../../model/Survey";
+import {Survey, SurveyQuestion, SurveyQuestionAnswer, SurveyQuestionExclusion} from "../../model/Survey";
 import {SurveyService} from "../../service/survey.service";
 import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
@@ -21,14 +21,22 @@ export class SurveyFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      description: '',
-      questions: this.fb.array([this.newQuestion()]),
-      exclusions: this.fb.array([]),
-      isActive: true,
-      startDate: null,
-      endDate: null
-    });
+    let surveyIdAsString = localStorage.getItem('surveyId');
+    if (surveyIdAsString) {
+      let surveyId = Number.parseInt(surveyIdAsString);
+      this.surveyService.getSurvey(surveyId).subscribe(
+        survey => this.form = this.buildFormFromSurvey(survey)
+      );
+    } else {
+      this.form = this.fb.group({
+        description: '',
+        questions: this.fb.array([this.newQuestion()]),
+        exclusions: this.fb.array([]),
+        isActive: true,
+        startDate: null,
+        endDate: null
+      });
+    }
   }
 
   get questionForms(): FormArray {
@@ -167,10 +175,12 @@ export class SurveyFormComponent implements OnInit {
 
   private buildSurveyFromForm(): Survey {
     return {
+      id: this.form.get('id')?.value,
       description: this.form.get('description')?.value,
       questions: this.form.get('questions')?.value
         .map((question: any, index: number) => this.buildQuestionFromForm(question, index)),
       configuration: {
+        id: this.form.get('configurationId')?.value,
         isActive: this.form.get('isActive')?.value,
         startDate: this.form.get('startDate')?.value,
         endDate: this.form.get('endDate')?.value,
@@ -181,6 +191,7 @@ export class SurveyFormComponent implements OnInit {
 
   private buildQuestionFromForm(formQuestion: any, index: number) {
     return {
+      id: formQuestion.id,
       type: formQuestion.multiChoice ? 'MULTI_CHOICE' : 'SINGLE_CHOICE',
       text: formQuestion.text,
       order: index + 1,
@@ -190,9 +201,52 @@ export class SurveyFormComponent implements OnInit {
 
   private buildAnswerFromForm(formAnswer: any, index: number): SurveyQuestionAnswer {
     return {
+      id: formAnswer.id,
       text: formAnswer.text,
       order: index + 1
     } as SurveyQuestionAnswer
   }
+
+  private buildFormFromSurvey(survey: Survey): FormGroup {
+    return this.fb.group({
+      id: survey.id,
+      description: survey.description,
+      questions: this.fb.array(survey.questions.map(question => this.buildQuestionFormFromQuestion(question))),
+      configurationId: survey.configuration.id,
+      exclusions: this.fb.array(
+        survey.configuration.exclusions.map(exclusion => this.buildExclusionFormFromQuestion(exclusion))),
+      isActive: survey.configuration.isActive,
+      startDate: survey.configuration.startDate,
+      endDate: survey.configuration.endDate
+    });
+  }
+
+  private buildExclusionFormFromQuestion(exclusion: SurveyQuestionExclusion): FormGroup {
+    return this.fb.group({
+      id: exclusion.id,
+      questionOrder: exclusion.questionOrder,
+      answerOrder: exclusion.answerOrder,
+      excludedQuestionOrder: exclusion.excludedQuestionOrder
+    });
+  }
+
+  private buildQuestionFormFromQuestion(question: SurveyQuestion) {
+    return this.fb.group({
+      id: question.id,
+      text: question.text,
+      multiChoice: question.type === "MULTI_CHOICE",
+      order: question.order,
+      answers: this.fb.array(question.answers.map(answer => this.buildAnswerFormFromAnswer(answer)))
+    });
+  }
+
+  private buildAnswerFormFromAnswer(answer: SurveyQuestionAnswer): FormGroup {
+    return this.fb.group({
+      id: answer.id,
+      text: answer.text,
+      order: answer.order
+    });
+  }
+
 
 }
