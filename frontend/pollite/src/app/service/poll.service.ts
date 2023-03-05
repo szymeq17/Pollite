@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Constants} from "../config/constants";
 import {Observable} from "rxjs";
-import {PollResults} from "../model/Poll";
+import {Poll, PollResults} from "../model/Poll";
 
 @Injectable({providedIn: 'root'})
 export class PollService {
@@ -16,6 +16,10 @@ export class PollService {
       .set('size', pageSize);
 
     return this.http.get(this.POLL_API_PATH, {'params': params});
+  }
+
+  public createPoll(poll: Poll) {
+    return this.http.post(this.POLL_API_PATH, poll);
   }
 
   public vote(pollId: number | undefined, answerId: number | undefined): Observable<PollResults> {

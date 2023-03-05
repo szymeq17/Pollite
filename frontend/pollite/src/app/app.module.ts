@@ -27,7 +27,6 @@ import { PollsComponent } from './poll/polls/polls/polls.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatPaginatorModule} from "@angular/material/paginator";
-import { PollFormDialogComponent } from './poll/poll-form-dialog/poll-form-dialog.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { SurveyFormComponent } from './survey/survey-form/survey-form.component';
@@ -49,6 +48,7 @@ import { SurveyInfoComponent } from './survey/survey-info/survey-info.component'
 import { SurveysViewComponent } from './survey/surveys-view/surveys-view.component';
 import { DeleteSurveyDialogComponent } from './survey/delete-survey-dialog/delete-survey-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import { PollFormComponent } from './poll/poll-form/poll-form.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +57,6 @@ import {MatDialogModule} from "@angular/material/dialog";
     PaginationComponent,
     PollItemComponent,
     PollsComponent,
-    PollFormDialogComponent,
     SurveyFormComponent,
     CompleteSurveyFormComponent,
     LoginComponent,
@@ -65,7 +64,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     UserProfileComponent,
     SurveyInfoComponent,
     SurveysViewComponent,
-    DeleteSurveyDialogComponent
+    DeleteSurveyDialogComponent,
+    PollFormComponent
   ],
   imports: [
     BrowserModule,

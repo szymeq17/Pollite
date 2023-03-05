@@ -1,0 +1,34 @@
+<div class="container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+    <h2>Question</h2>
+    <mat-form-field>
+      <textarea matInput placeholder="Your question..." formControlName="text" required></textarea>
+    </mat-form-field>
+    <h2>Answers</h2>
+    <div formArrayName="pollAnswers" class="answers-container">
+      <div *ngFor="let answer of answerForms.controls; let answerIndex=index" [formGroupName]="answerIndex" class="answer-container">
+        <mat-form-field>
+          <input matInput placeholder="Answer" formControlName="text" required>
+        </mat-form-field>
+        <button type="button" (click)="removeAnswer(answerIndex)" class="remove-answer-btn">
+          <mat-icon [ngStyle]="{'color':'#D00224'}">delete</mat-icon>
+        </button>
+      </div>
+      <button type="button" (click)="addAnswer()" class="add-answer-btn">
+        <mat-icon [ngStyle]="{'color':'white'}">add</mat-icon>
+      </button>
+    </div>
+    <h2>Availability</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Enter a date range in which survey should be active or leave blank if not applicable</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input formControlName="startDate" matStartDate placeholder="Start date">
+        <input formControlName="endDate" matEndDate placeholder="End date">
+      </mat-date-range-input>
+      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <button type="submit" class="btn-primary publish-btn">Publish</button>
+  </form>
+</div>
