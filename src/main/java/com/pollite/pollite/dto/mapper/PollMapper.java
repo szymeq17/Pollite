@@ -1,6 +1,7 @@
 package com.pollite.pollite.dto.mapper;
 
 import com.pollite.pollite.dto.PollDto;
+import com.pollite.pollite.dto.PollInfoDto;
 import com.pollite.pollite.model.Poll;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,4 +16,6 @@ public interface PollMapper {
     PollDto toDto(Poll poll);
 
     Poll fromDto(PollDto pollDTO);
+
+    PollInfoDto toPollInfoDto(Poll poll);
 }

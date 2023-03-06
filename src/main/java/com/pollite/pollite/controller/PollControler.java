@@ -1,6 +1,7 @@
 package com.pollite.pollite.controller;
 
 import com.pollite.pollite.dto.PollDto;
+import com.pollite.pollite.dto.PollInfoDto;
 import com.pollite.pollite.dto.PollResults;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
 import com.pollite.pollite.exception.PollDoesNotExistException;
@@ -45,8 +46,10 @@ public class PollControler {
     }
 
     @GetMapping("/users/{username}")
-    public ResponseEntity<Page<PollDto>> getUsersPolls(@PathVariable String username, Pageable pageable) {
-        return ResponseEntity.ok(pollService.findPollsByOwner(username, pageable));
+    public ResponseEntity<Page<PollInfoDto>> getUsersPollInfos(@PathVariable String username,
+                                                               Pageable pageable,
+                                                               Principal principal) {
+        return ResponseEntity.ok(pollService.findUsersPollInfos(username, pageable, principal));
     }
 
     @DeleteMapping("/{pollId}")

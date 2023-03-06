@@ -2,6 +2,7 @@ package com.pollite.pollite.service.poll;
 
 import com.pollite.pollite.dto.PollAnswerResult;
 import com.pollite.pollite.dto.PollDto;
+import com.pollite.pollite.dto.PollInfoDto;
 import com.pollite.pollite.dto.PollResults;
 import com.pollite.pollite.dto.mapper.PollMapper;
 import com.pollite.pollite.exception.PollAnswerDoesNotExistException;
@@ -51,8 +52,12 @@ public class PollService {
         return pollRepository.findById(id).map(pollMapper::toDto);
     }
 
-    public Page<PollDto> findPollsByOwner(String username, Pageable pageable) {
-        return pollRepository.findAllByOwnerUsername(username, pageable).map(pollMapper::toDto);
+    public Page<PollInfoDto> findUsersPollInfos(String username, Pageable pageable, Principal principal) {
+        if (!principal.getName().equals(username)) {
+            throw new UserNotAuthorizedException(principal.getName());
+        }
+
+        return pollRepository.findAllByOwnerUsername(username, pageable).map(pollMapper::toPollInfoDto);
     }
 
     public Page<PollDto> getPolls(Pageable pageable) {
