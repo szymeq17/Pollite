@@ -1,0 +1,8 @@
+<div class="container">
+  <div class="polls-container">
+    <app-poll-info *ngFor="let pollInfo of pollInfos" [pollInfo]="pollInfo"></app-poll-info>
+  </div>
+  <div class="pagination">
+    <mat-paginator [length]="pollsTotal" [pageSize]="5" [pageSizeOptions]="[5, 10]"></mat-paginator>
+  </div>
+</div>

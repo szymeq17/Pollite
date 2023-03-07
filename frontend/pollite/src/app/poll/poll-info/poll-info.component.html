@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="info-container">
+    <div class="poll-text">
+      {{pollInfo.text}}
+    </div>
+  </div>
+
+  <button
+    class="show-results-btn"
+    type="button"
+    (click)="getAndShowResults(basicCollapse)"
+    [attr.aria-expanded]="!basicCollapse.collapsed"
+    aria-controls="collapseExample"
+  >
+    {{ showResults ? "Hide" : "Show results"}}
+  </button>
+
+  <div class="result-info-container" id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
+    <div *ngIf="pollResults" class="results-container">
+      <div *ngFor="let pollAnswerResult of pollResults.results" class="result-info">
+        <span>{{pollAnswerResult.pollAnswerText}}</span>
+        <div class="numbers">
+          <div class="percentage-pill">
+            {{pollAnswerResult.percentage}}%
+          </div>
+          <div class="votes-pill">
+            {{pollAnswerResult.votes}}
+          </div>
+        </div>
+      </div>
+      <div class="votes-total">
+        {{pollResults.votesTotal}} votes
+      </div>
+    </div>
+  </div>
+</div>

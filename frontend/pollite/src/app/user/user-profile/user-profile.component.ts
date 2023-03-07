@@ -1,8 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {PollService} from "../../service/poll.service";
-import {Poll} from "../../model/Poll";
-import {MatPaginator} from "@angular/material/paginator";
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-user-profile',
@@ -11,21 +7,8 @@ import {MatPaginator} from "@angular/material/paginator";
 })
 export class UserProfileComponent implements OnInit {
 
-  polls: Poll[];
-  pollsTotal: number;
-  @ViewChild(MatPaginator) pollsPaginator: MatPaginator;
+  constructor() { }
 
-  constructor(private route: ActivatedRoute,
-              private pollService: PollService) { }
-
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const username = params['username'];
-      this.pollService.getUsersPolls(username, 0, 10).subscribe(data => {
-        this.polls = data['content'];
-        this.pollsTotal = data['totalElements'];
-      });
-    })
-  }
+  ngOnInit(): void {}
 
 }
