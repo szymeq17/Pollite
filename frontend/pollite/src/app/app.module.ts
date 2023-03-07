@@ -49,6 +49,8 @@ import { SurveysViewComponent } from './survey/surveys-view/surveys-view.compone
 import { DeleteSurveyDialogComponent } from './survey/delete-survey-dialog/delete-survey-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { PollFormComponent } from './poll/poll-form/poll-form.component';
+import { PollsViewComponent } from './poll/polls-view/polls-view.component';
+import { PollInfoComponent } from './poll/poll-info/poll-info.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +67,9 @@ import { PollFormComponent } from './poll/poll-form/poll-form.component';
     SurveyInfoComponent,
     SurveysViewComponent,
     DeleteSurveyDialogComponent,
-    PollFormComponent
+    PollFormComponent,
+    PollsViewComponent,
+    PollInfoComponent
   ],
   imports: [
     BrowserModule,

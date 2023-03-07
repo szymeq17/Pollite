@@ -18,9 +18,13 @@
   gap: 0.7rem;
 }
 
-.id {
+.survey-link {
   color: $pollite-primary-color;
   font-weight: bold;
+}
+
+.survey-link:hover {
+  color: darken($pollite-primary-color, 0.3);
 }
 
 .description {
