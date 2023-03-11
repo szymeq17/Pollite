@@ -14,7 +14,7 @@
                 </div>
                 <div class="question-votes-total">
                   <div class="question-votes-total-value">
-                    500
+                    {{ questionResult.total }}
                   </div>
                   <div class="votes-desc">VOTES</div>
                 </div>
@@ -32,7 +32,7 @@
                       <div class="answer-votes-desc">{{ answerResult.total === 1 ? "VOTE" : "VOTES" }}</div>
                     </div>
                     <div class="answer-votes-percent">
-                      45%
+                      {{ answerResult.percentage }}%
                     </div>
                   </div>
                 </div>

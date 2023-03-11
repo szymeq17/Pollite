@@ -2,31 +2,27 @@ package com.pollite.pollite.service.survey;
 
 import com.pollite.pollite.dto.*;
 import com.pollite.pollite.dto.mapper.CompletedSurveyMapper;
-import com.pollite.pollite.exception.InvalidCompletedSurveyException;
 import com.pollite.pollite.exception.SurveyDoesNotExistException;
-import com.pollite.pollite.exception.SurveyNotActiveException;
 import com.pollite.pollite.model.survey.CompletedSurvey;
 import com.pollite.pollite.model.survey.Survey;
 import com.pollite.pollite.model.survey.answer.SurveyQuestionAnswer;
 import com.pollite.pollite.model.survey.question.CompletedQuestion;
 import com.pollite.pollite.model.survey.question.SurveyQuestion;
-import com.pollite.pollite.projection.SurveyResultsProjection;
 import com.pollite.pollite.repository.CompletedSurveyRepository;
 import com.pollite.pollite.repository.SurveyRepository;
 import com.pollite.pollite.validator.CompletedSurveyValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Predicates;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.partitioningBy;
 
 @Service
 @RequiredArgsConstructor
@@ -50,11 +46,55 @@ public class CompletedSurveyService {
         var survey = surveyRepository.findById(surveyId)
                 .orElseThrow(() -> new SurveyDoesNotExistException(surveyId));
 
-        var completedSurveys = completedSurveyRepository.findAllBySurveyId(surveyId)
+        var completedSurveys = completedSurveyRepository.findAllBySurveyId(surveyId).toList();
+        var completedSurveysFiltered = completedSurveyRepository.findAllBySurveyId(surveyId)
                 .filter(filtersToPredicate(filters))
                 .toList();
 
-        return calculateResults(survey, completedSurveys);
+        var results = calculateResults(survey, completedSurveys);
+        var resultsFiltered = calculateResults(survey, completedSurveysFiltered);
+
+        return calculateTotalsAndPercentages(results, resultsFiltered);
+    }
+
+    private SurveyResultsDto calculateTotalsAndPercentages(SurveyResultsDto results, SurveyResultsDto resultsFiltered) {
+        return SurveyResultsDto.builder().questionsResults(resultsFiltered.getQuestionsResults().stream()
+                .map(questionResults ->
+                        SurveyQuestionResultsDto.builder()
+                                .total(questionResults.getTotal())
+                                .questionText(questionResults.getQuestionText())
+                                .questionId(questionResults.getQuestionId())
+                                .answersResults(
+                                        questionResults.getAnswersResults().stream()
+                                                .map(answerResults ->
+                                                        SurveyQuestionAnswerResultsDto.builder()
+                                                                .total(answerResults.getTotal())
+                                                                .percentage(calculatePercentage(
+                                                                        answerResults.getTotal(),
+                                                                        results.findQuestionResultsById(questionResults.getQuestionId())
+                                                                                .getTotal()
+                                                                ))
+                                                                .answerText(answerResults.getAnswerText())
+                                                                .answerId(answerResults.getAnswerId())
+                                                                .build())
+                                                .collect(Collectors.toList()))
+                                .build()
+                )
+                .collect(Collectors.toList()))
+                .build();
+    }
+
+    private BigDecimal calculatePercentage(int first, int second) {
+        if (second == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        return BigDecimal.valueOf(first)
+                .divide(
+                        BigDecimal.valueOf(second),
+                        new MathContext(4, RoundingMode.HALF_DOWN)
+                )
+                .scaleByPowerOfTen(2);
     }
 
     private SurveyResultsDto calculateResults(Survey survey, List<CompletedSurvey> completedSurveys) {
@@ -110,6 +150,7 @@ public class CompletedSurveyService {
                 .questionId(questionId)
                 .questionText(question.getText())
                 .answersResults(answersResults)
+                .total(answersMap.values().stream().reduce(Integer::sum).orElse(0))
                 .build();
     }
 
@@ -132,58 +173,4 @@ public class CompletedSurveyService {
                 .map(CompletedSurveyFilter::toPredicate)
                 .reduce(p -> true, Predicate::and);
     }
-
-//    public SurveyResultsDto getSurveyResults(Long surveyId) throws SurveyDoesNotExistException {
-//        var survey = surveyRepository.findById(surveyId)
-//                .orElseThrow(() -> new SurveyDoesNotExistException(surveyId));
-//
-//        var resultsProjection = completedSurveyRepository.countAnswers(surveyId);
-//
-//        Map<Long , Map<Long, List<SurveyResultsProjection>>> results = resultsProjection.stream()
-//                .collect(
-//                        groupingBy(
-//                                SurveyResultsProjection::getQuestionId,
-//                                groupingBy(SurveyResultsProjection::getAnswerId)));
-//
-//        return toSurveyResultsDto(survey, results);
-//    }
-//
-//    private SurveyResultsDto toSurveyResultsDto(Survey survey,
-//                                                Map<Long , Map<Long, List<SurveyResultsProjection>>> results) {
-//        var questionResults = results.entrySet()
-//                .stream()
-//                .map(entry -> toSurveyQuestionResultsDto(survey, entry.getKey(), entry.getValue()))
-//                .toList();
-//
-//        return SurveyResultsDto.builder()
-//                .questionsResults(questionResults)
-//                .build();
-//    }
-//
-//    private SurveyQuestionResultsDto toSurveyQuestionResultsDto(Survey survey,
-//                                                                Long questionId,
-//                                                                Map<Long, List<SurveyResultsProjection>> resultsByAnswerId) {
-//        var answersResults = resultsByAnswerId.values().stream()
-//                .map(surveyResultsProjections -> toQuestionAnswerResultsDto(
-//                        survey.getQuestionById(questionId),
-//                        surveyResultsProjections.get(0))
-//                )
-//                .toList();
-//
-//        return SurveyQuestionResultsDto.builder()
-//                .questionId(questionId)
-//                .questionText(survey.getQuestionById(questionId).getText())
-//                .answersResults(answersResults)
-//                .build();
-//    }
-//
-//    private SurveyQuestionAnswerResultsDto toQuestionAnswerResultsDto(SurveyQuestion question,
-//                                                                      SurveyResultsProjection surveyResultsProjection) {
-//        return SurveyQuestionAnswerResultsDto.builder()
-//                .answerId(surveyResultsProjection.getAnswerId())
-//                .total(surveyResultsProjection.getTotal())
-//                .answerText(question.getAnswerById(surveyResultsProjection.getAnswerId()).getText())
-//                .build();
-//    }
-
 }

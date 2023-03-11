@@ -12,4 +12,5 @@ public class SurveyQuestionResultsDto {
     private Long questionId;
     private String questionText;
     private List<SurveyQuestionAnswerResultsDto> answersResults;
+    private Integer total;
 }
