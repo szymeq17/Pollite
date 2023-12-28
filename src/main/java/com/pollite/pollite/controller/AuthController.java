@@ -20,9 +20,9 @@ public class AuthController {
         return ResponseEntity.ok(userService.authenticateUser(user));
     }
 
-    @GetMapping("register")
-    public ResponseEntity<UserDto> register(@RequestParam String username, @RequestParam String password) {
-        return ResponseEntity.ok(userService.registerUser(username, password));
+    @PostMapping("register")
+    public ResponseEntity<UserDto> register(@RequestBody UserDto user) {
+        return ResponseEntity.ok(userService.registerUser(user.getUsername(), user.getPassword()));
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)

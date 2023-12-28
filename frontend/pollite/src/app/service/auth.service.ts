@@ -40,6 +40,16 @@ export class AuthService {
       }));
   }
 
+  register(username: string, password: string) {
+    return this.http.post<User>(`${Constants.API_ENDPOINT}auth/register`, { username, password })
+      .pipe(map(user => {
+        user.authdata = window.btoa(username + ':' + password);
+        localStorage.setItem('user', JSON.stringify(user));
+        this.userSubject.next(user);
+        return user;
+      }));
+  }
+
   logout() {
     localStorage.removeItem('user');
     // @ts-ignore

@@ -40,7 +40,7 @@ import { CompleteSurveyFormComponent } from './survey/complete-survey-form/compl
 import {MatCardModule} from "@angular/material/card";
 import {MatRadioModule} from "@angular/material/radio";
 import {AuthInterceptor} from "./auth/auth.interceptor";
-import { LoginComponent } from './login/login/login.component';
+import { LoginComponent } from './auth/login/login.component';
 import { SurveyResultsComponent } from './survey/survey-results/survey-results.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
 import {MatTabsModule} from "@angular/material/tabs";
@@ -51,6 +51,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { PollFormComponent } from './poll/poll-form/poll-form.component';
 import { PollsViewComponent } from './poll/polls-view/polls-view.component';
 import { PollInfoComponent } from './poll/poll-info/poll-info.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { PollInfoComponent } from './poll/poll-info/poll-info.component';
     DeleteSurveyDialogComponent,
     PollFormComponent,
     PollsViewComponent,
-    PollInfoComponent
+    PollInfoComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

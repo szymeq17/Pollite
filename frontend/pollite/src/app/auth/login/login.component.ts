@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+
     this.authService.login(
       this.form.get('username')?.value,
       this.form.get('password')?.value).subscribe(
