@@ -1,6 +1,7 @@
 package com.pollite.pollite.service.poll;
 
 import com.pollite.pollite.dto.UserDto;
+import com.pollite.pollite.exception.UserAlreadyExistsException;
 import com.pollite.pollite.exception.UserDoesNotExistException;
 import com.pollite.pollite.model.auth.User;
 import com.pollite.pollite.repository.UserRepository;
@@ -14,13 +15,20 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void registerUser(String userName, String password) {
+    public UserDto registerUser(String userName, String password) {
         if (!userExists(userName)) {
             String encodedPassword = passwordEncoder.encode(password);
             User newUser = new User();
             newUser.setUsername(userName);
             newUser.setPassword(encodedPassword);
             userRepository.save(newUser);
+
+            return UserDto.builder()
+                    .username(userName)
+                    .password(password)
+                    .build();
+        } else {
+            throw new UserAlreadyExistsException(userName);
         }
     }
 

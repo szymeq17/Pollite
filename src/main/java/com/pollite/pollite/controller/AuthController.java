@@ -1,6 +1,7 @@
 package com.pollite.pollite.controller;
 
 import com.pollite.pollite.dto.UserDto;
+import com.pollite.pollite.exception.UserAlreadyExistsException;
 import com.pollite.pollite.service.poll.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,12 @@ public class AuthController {
     }
 
     @GetMapping("register")
-    public String register(@RequestParam String username, @RequestParam String password) {
-        userService.registerUser(username, password);
-        return "Zarejestrowano użytkownika " + username;
+    public ResponseEntity<UserDto> register(@RequestParam String username, @RequestParam String password) {
+        return ResponseEntity.ok(userService.registerUser(username, password));
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity handleUserAlreadyExistsException() {
+        return ResponseEntity.badRequest().build();
     }
 }
