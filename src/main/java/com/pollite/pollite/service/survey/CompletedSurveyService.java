@@ -46,8 +46,8 @@ public class CompletedSurveyService {
         var survey = surveyRepository.findById(surveyId)
                 .orElseThrow(() -> new SurveyDoesNotExistException(surveyId));
 
-        var completedSurveys = completedSurveyRepository.findAllBySurveyId(surveyId).toList();
-        var completedSurveysFiltered = completedSurveyRepository.findAllBySurveyId(surveyId)
+        var completedSurveys = completedSurveyRepository.findAllBySurveyId(surveyId);
+        var completedSurveysFiltered = completedSurveyRepository.findAllBySurveyId(surveyId).stream()
                 .filter(filtersToPredicate(filters))
                 .toList();
 

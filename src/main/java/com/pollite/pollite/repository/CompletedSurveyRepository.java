@@ -26,5 +26,5 @@ public interface CompletedSurveyRepository extends JpaRepository<CompletedSurvey
     )
     List<SurveyResultsProjection> countAnswers(Long surveyId);
 
-    Stream<CompletedSurvey> findAllBySurveyId(Long surveyId);
+    List<CompletedSurvey> findAllBySurveyId(Long surveyId);
 }
