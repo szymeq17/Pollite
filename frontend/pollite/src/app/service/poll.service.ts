@@ -37,4 +37,8 @@ export class PollService {
   public getPollResults(pollId: number): Observable<PollResults> {
     return this.http.get<PollResults>(this.POLL_API_PATH + `/${pollId}/results`);
   }
+
+  public deletePoll(pollId: number): Observable<any> {
+    return this.http.delete(this.POLL_API_PATH + `/${pollId}`);
+  }
 }

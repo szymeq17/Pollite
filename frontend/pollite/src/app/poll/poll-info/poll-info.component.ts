@@ -2,6 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {PollInfo} from "../../model/PollInfo";
 import {PollService} from "../../service/poll.service";
 import {PollResults} from "../../model/Poll";
+import {MatDialog} from "@angular/material/dialog";
+import {DeleteSurveyDialogComponent} from "../../survey/delete-survey-dialog/delete-survey-dialog.component";
+import {DeletePollDialogComponent} from "../delete-poll-dialog/delete-poll-dialog.component";
 
 @Component({
   selector: 'app-poll-info',
@@ -14,7 +17,8 @@ export class PollInfoComponent implements OnInit {
   showResults: boolean = false;
   pollResults: PollResults | undefined;
 
-  constructor(private pollService: PollService) { }
+  constructor(private pollService: PollService,
+              private deletePollDialog: MatDialog) { }
 
   ngOnInit(): void {
   }
@@ -38,6 +42,23 @@ export class PollInfoComponent implements OnInit {
       collapse.toggle();
       this.showResults = true;
     }
+  }
+
+  deletePoll() {
+    this.openDeletePollDialog();
+  }
+
+  private openDeletePollDialog() {
+    const dialogRef = this.deletePollDialog.open(DeletePollDialogComponent,
+      {data: this.pollInfo.id});
+
+    dialogRef.afterClosed().subscribe(shouldDelete => {
+      if (shouldDelete) {
+        this.pollService.deletePoll(this.pollInfo.id).subscribe(
+          _ => window.location.reload()
+        );
+      }
+    });
   }
 
 }

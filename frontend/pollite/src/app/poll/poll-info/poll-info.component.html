@@ -15,6 +15,14 @@
     {{ showResults ? "Hide" : "Show results"}}
   </button>
 
+  <button
+    class="delete-btn"
+    type="button"
+    (click)="deletePoll()"
+  >
+    Delete
+  </button>
+
   <div class="result-info-container" id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
     <div *ngIf="pollResults" class="results-container">
       <div *ngFor="let pollAnswerResult of pollResults.results" class="result-info">

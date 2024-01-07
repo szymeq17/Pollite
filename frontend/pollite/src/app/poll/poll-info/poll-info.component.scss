@@ -27,6 +27,16 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
 }
 
+.delete-btn {
+  width: 20%;
+  color: white;
+  font-weight: bold;
+  background-color: $pollite-primary-color;
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+}
+
 .results-container {
   width: 100%;
   display: flex;
