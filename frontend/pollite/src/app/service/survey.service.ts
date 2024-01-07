@@ -28,12 +28,20 @@ export class SurveyService {
     return this.http.post<SurveyResults>(this.SURVEY_API_PATH + `/${surveyId}/results`, filters);
   }
 
-  public getSurveyInfos(username: string, page: number, pageSize: number): Observable<any> {
+  public getUsersSurveyInfos(username: string, page: number, pageSize: number): Observable<any> {
     const params = new HttpParams()
       .set('page', page)
       .set('size', pageSize);
 
     return this.http.get(this.SURVEY_API_PATH + `/user/${username}`, {'params': params});
+  }
+
+  public getAllSurveyInfos(page: number, pageSize: number): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', pageSize);
+
+    return this.http.get(this.SURVEY_API_PATH, {'params': params});
   }
 
   public deleteSurvey(surveyId: number) {

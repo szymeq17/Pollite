@@ -9,8 +9,10 @@ import {SurveyResultsComponent} from "./survey/survey-results/survey-results.com
 import {UserProfileComponent} from "./user/user-profile/user-profile.component";
 import {PollFormComponent} from "./poll/poll-form/poll-form.component";
 import {RegisterComponent} from "./auth/register/register.component";
+import {MainComponent} from "./main/main.component";
 
 const routes: Routes = [
+  { path: '', component: MainComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'polls', component: PollsComponent },

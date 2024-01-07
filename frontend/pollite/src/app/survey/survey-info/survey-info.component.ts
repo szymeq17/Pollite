@@ -4,6 +4,7 @@ import {SurveyInfo} from "../../model/SurveyInfo";
 import {MatDialog} from "@angular/material/dialog";
 import {DeleteSurveyDialogComponent} from "../delete-survey-dialog/delete-survey-dialog.component";
 import {SurveyService} from "../../service/survey.service";
+import {AuthService} from "../../service/auth.service";
 
 @Component({
   selector: 'app-survey-info',
@@ -13,13 +14,20 @@ import {SurveyService} from "../../service/survey.service";
 export class SurveyInfoComponent implements OnInit {
 
   @Input() surveyInfo: SurveyInfo;
+  isOwnedByLoggedInUser: boolean;
 
   constructor(private router: Router,
+              private authService: AuthService,
               private deleteSurveyDialog: MatDialog,
               private surveyService: SurveyService) {
   }
 
   ngOnInit(): void {
+    this.authService.user.subscribe(user =>
+    {
+      console.log(user.username)
+      this.isOwnedByLoggedInUser = user.username === this.surveyInfo.owner
+    });
   }
 
   editSurvey() {
@@ -41,7 +49,6 @@ export class SurveyInfoComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(shouldDelete => {
       if (shouldDelete) {
-        console.log("TU")
         this.surveyService.deleteSurvey(this.surveyInfo.surveyId).subscribe(
           _ => window.location.reload()
         );

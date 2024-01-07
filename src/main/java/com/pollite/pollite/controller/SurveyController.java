@@ -37,6 +37,11 @@ public class SurveyController {
         return surveyService.addSurvey(surveyDto, principal);
     }
 
+    @GetMapping()
+    public ResponseEntity<Page<SurveyInfoDto>> getAllSurveyInfos(Pageable pageable) {
+        return ResponseEntity.ok(surveyService.getAllSurveyInfos(pageable));
+    }
+
     @GetMapping("/{surveyId}")
     public ResponseEntity<SurveyDto> getSurvey(@PathVariable Long surveyId) {
         return surveyService.findSurvey(surveyId)

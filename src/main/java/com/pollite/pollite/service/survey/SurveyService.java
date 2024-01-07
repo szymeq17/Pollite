@@ -68,6 +68,10 @@ public class SurveyService {
         return surveyRepository.findAllByOwnerUsername(username, pageable).map(this::toSurveyInfoDto);
     }
 
+    public Page<SurveyInfoDto> getAllSurveyInfos(Pageable pageable) {
+        return surveyRepository.findAll(pageable).map(this::toSurveyInfoDto);
+    }
+
     private SurveyConfiguration createDefaultConfiguration() {
         return SurveyConfiguration.builder()
                 .isActive(true)
@@ -79,6 +83,7 @@ public class SurveyService {
                 .surveyId(survey.getId())
                 .description(survey.getDescription())
                 .isActive(survey.getConfiguration().getIsActive())
+                .owner(survey.getOwner().getUsername())
                 .startDate(survey.getConfiguration().getStartDate())
                 .endDate(survey.getConfiguration().getEndDate())
                 .build();

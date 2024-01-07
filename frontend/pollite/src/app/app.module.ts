@@ -52,6 +52,7 @@ import { PollFormComponent } from './poll/poll-form/poll-form.component';
 import { PollsViewComponent } from './poll/polls-view/polls-view.component';
 import { PollInfoComponent } from './poll/poll-info/poll-info.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { MainComponent } from './main/main.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { RegisterComponent } from './auth/register/register.component';
     PollFormComponent,
     PollsViewComponent,
     PollInfoComponent,
-    RegisterComponent
+    RegisterComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from "@angular/material/paginator";
 import {SurveyInfo} from "../../model/SurveyInfo";
 import {SurveyService} from "../../service/survey.service";
@@ -14,18 +14,28 @@ export class SurveysViewComponent implements OnInit, AfterViewInit {
 
   surveyInfos: SurveyInfo[];
   surveysTotal: number;
+  @Input() displayAll: boolean;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private surveyService: SurveyService,
               private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.surveyService.getSurveyInfos(this.authService.userName, 0, 5).subscribe(
-      data => {
-        this.surveyInfos = data['content'];
-        this.surveysTotal = data['totalElements'];
-      }
-    );
+    if (this.displayAll) {
+      this.surveyService.getAllSurveyInfos(0, 5).subscribe(
+        data => {
+          this.surveyInfos = data['content'];
+          this.surveysTotal = data['totalElements'];
+        }
+      );
+    } else {
+      this.surveyService.getUsersSurveyInfos(this.authService.userName, 0, 5).subscribe(
+        data => {
+          this.surveyInfos = data['content'];
+          this.surveysTotal = data['totalElements'];
+        }
+      );
+    }
   }
 
   ngAfterViewInit(): void {
@@ -37,10 +47,17 @@ export class SurveysViewComponent implements OnInit, AfterViewInit {
   }
 
   loadSurveys(): void {
-    this.surveyService.getSurveyInfos(this.authService.userName, this.paginator.pageIndex, this.paginator.pageSize)
-      .subscribe(
-        data => this.surveyInfos = data['content']
-      );
-  }
+    if (this.displayAll) {
+      this.surveyService.getAllSurveyInfos(this.paginator.pageIndex, this.paginator.pageSize)
+        .subscribe(
+          data => this.surveyInfos = data['content']
+        );
+    } else {
+      this.surveyService.getUsersSurveyInfos(this.authService.userName, this.paginator.pageIndex, this.paginator.pageSize)
+        .subscribe(
+          data => this.surveyInfos = data['content']
+        );
+      }
+    }
 
 }

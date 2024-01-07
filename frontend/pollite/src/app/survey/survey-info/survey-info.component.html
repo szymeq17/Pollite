@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <div class="controls-container">
+  <div *ngIf="isOwnedByLoggedInUser" class="controls-container">
     <button class="btn-primary" (click)="editSurvey()">Edit</button>
     <button class="btn-primary" (click)="deleteSurvey()">Delete</button>
     <button class="btn-primary" (click)="showResulsts()">Show results</button>

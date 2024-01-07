@@ -1,0 +1,10 @@
+<div *ngIf="user; else notLoggedIn">
+  <div class="main-container">
+    <h1 class="welcome-header">Hello, {{user.username}}!</h1>
+    <h2 class="check-out-surveys-header">Check out our latest surveys</h2>
+    <app-surveys-view [displayAll]="true"></app-surveys-view>
+  </div>
+</div>
+<ng-template #notLoggedIn>
+  <app-login></app-login>
+</ng-template>

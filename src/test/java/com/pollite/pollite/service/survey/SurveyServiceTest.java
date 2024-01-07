@@ -128,6 +128,9 @@ public class SurveyServiceTest {
                                 .startDate(OffsetDateTime.MIN)
                                 .endDate(OffsetDateTime.MAX)
                                 .build())
+                .owner(User.builder()
+                        .username(USERNAME)
+                        .build())
                 .build();
         var pageableMock = mock(Pageable.class);
         var surveyPage = new PageImpl<>(Collections.singletonList(survey));
@@ -146,6 +149,42 @@ public class SurveyServiceTest {
         assertThat(surveyInfoDto.getDescription()).isEqualTo(survey.getDescription());
         assertThat(surveyInfoDto.getStartDate()).isEqualTo(OffsetDateTime.MIN);
         assertThat(surveyInfoDto.getEndDate()).isEqualTo(OffsetDateTime.MAX);
+        assertThat(surveyInfoDto.getOwner()).isEqualTo(USERNAME);
+    }
+
+    @Test
+    public void shouldGetAllSurveyInfos() {
+        //given
+        var survey = Survey.builder()
+                .id(SURVEY_ID)
+                .description("description")
+                .configuration(
+                        SurveyConfiguration.builder()
+                                .isActive(true)
+                                .startDate(OffsetDateTime.MIN)
+                                .endDate(OffsetDateTime.MAX)
+                                .build())
+                .owner(User.builder()
+                        .username(USERNAME)
+                        .build())
+                .build();
+        var pageableMock = mock(Pageable.class);
+        var surveyPage = new PageImpl<>(Collections.singletonList(survey));
+
+        when(surveyRepository.findAll(pageableMock)).thenReturn(surveyPage);
+
+        //when
+        var result = sut.getAllSurveyInfos(pageableMock);
+
+        //then
+        assertThat(result.getTotalElements()).isEqualTo(1L);
+
+        var surveyInfoDto = result.get().findFirst().get();
+        assertThat(surveyInfoDto.getSurveyId()).isEqualTo(SURVEY_ID);
+        assertThat(surveyInfoDto.getDescription()).isEqualTo(survey.getDescription());
+        assertThat(surveyInfoDto.getStartDate()).isEqualTo(OffsetDateTime.MIN);
+        assertThat(surveyInfoDto.getEndDate()).isEqualTo(OffsetDateTime.MAX);
+        assertThat(surveyInfoDto.getOwner()).isEqualTo(USERNAME);
     }
 
     private User mockUser() {
