@@ -109,7 +109,7 @@ export class SurveyFormComponent implements OnInit {
     if (questionIndex > 0) {
       const array = this.questionForms.value;
       const newArray = this.swap(array, questionIndex - 1, questionIndex);
-      this.questionForms.setValue(newArray);
+      this.questionForms.patchValue(newArray);
     }
   }
 
@@ -117,7 +117,7 @@ export class SurveyFormComponent implements OnInit {
     const array = this.questionForms.value;
     if (questionIndex < array.length - 1) {
       const newArray = this.swap(array, questionIndex, questionIndex + 1);
-      this.questionForms.setValue(newArray);
+      this.questionForms.patchValue(newArray);
     }
   }
 
