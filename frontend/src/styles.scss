@@ -1,7 +1,7 @@
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
+@use 'node_modules/@angular/material/index' as mat;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -36,13 +36,13 @@ $pollite-theme: mat.define-light-theme((
 /* You can add global styles to this file, and also import other style files */
 
 /* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
-@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
-@import '~@fortawesome/fontawesome-free/scss/solid.scss';
-@import '~@fortawesome/fontawesome-free/scss/regular.scss';
-@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
+@import 'node_modules/@fortawesome/fontawesome-free/scss/solid';
+@import 'node_modules/@fortawesome/fontawesome-free/scss/regular';
+@import 'node_modules/@fortawesome/fontawesome-free/scss/brands';
 
-@import '~mdb-angular-ui-kit/assets/scss/mdb.scss';
+@import 'node_modules/mdb-angular-ui-kit/assets/scss/mdb';
 
 $pollite-primary-color: #D00224;
 
