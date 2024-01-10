@@ -155,7 +155,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
-                    <mainClass>dev.marco.example.springboot.Application</mainClass>
+                    <mainClass>com.pollite.PolliteApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
