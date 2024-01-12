@@ -1,4 +1,8 @@
 version: "3.9"
+
+networks:
+  pollite-network:
+
 services:
   backend:
     image: pollite-backend
@@ -7,6 +11,11 @@ services:
       context: ./backend
     ports:
       - "9000:8080"
+    depends_on:
+      - db-pollite
+    networks:
+      - pollite-network
+
   frontend:
     image: pollite-frontend
     container_name: frontend
@@ -16,3 +25,30 @@ services:
       - "4200:80"
     depends_on:
       - backend
+    networks:
+      - pollite-network
+
+  db-pollite:
+    build: ./db
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_DATABASE: pollite
+      MYSQL_ROOT_PASSWORD: password
+#      MYSQL_USER: pollite
+#      MYSQL_PASSWORD: password
+    networks:
+      - pollite-network
+
+#  mysqldb:
+#    image: "mysql:8.0"
+#    restart: always
+#    ports:
+#      - "3309:3306"
+#    environment:
+#      MYSQL_DATABASE: pollite
+#      MYSQL_USER: pollite
+#      MYSQL_PASSWORD: password
+#      MYSQL_ROOT_PASSWORD: password
+#    networks:
+#    - pollite-network

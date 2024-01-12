@@ -1,0 +1,3 @@
+mysql -upollite -ppassword << EOF
+CREATE DATABASE pollite DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+EOF
