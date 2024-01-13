@@ -3,7 +3,7 @@
     <div>
       <a class="survey-link" href="/survey/{{surveyInfo.surveyId}}">Survey #{{surveyInfo.surveyId}}</a>
     </div>
-    <div class="description">
+    <div (click)="goToSurvey(surveyInfo.surveyId)" class="description">
       {{surveyInfo.description}}
     </div>
   </div>

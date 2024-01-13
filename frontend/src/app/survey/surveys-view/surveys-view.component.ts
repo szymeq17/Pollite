@@ -19,8 +19,7 @@ export class SurveysViewComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private surveyService: SurveyService,
-              private authService: AuthService,
-              private router: Router) { }
+              private authService: AuthService) { }
 
   ngOnInit(): void {
     if (this.displayAll) {
@@ -62,8 +61,6 @@ export class SurveysViewComponent implements OnInit, AfterViewInit {
       }
     }
 
-    goToSurvey(surveyId: number) {
-      this.router.navigate([`/survey/${surveyId}`]);
-    }
+
 
 }

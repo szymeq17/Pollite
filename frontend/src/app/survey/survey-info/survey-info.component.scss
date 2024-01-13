@@ -6,7 +6,6 @@
   padding: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
   border-radius: 10px;
-  cursor: pointer;
 }
 
 .info-container {
@@ -29,5 +28,6 @@
 }
 
 .description {
+  cursor: pointer;
   color: #7b7b7b;
 }

@@ -55,4 +55,8 @@ export class SurveyInfoComponent implements OnInit {
     });
   }
 
+  goToSurvey(surveyId: number) {
+    this.router.navigate([`/survey/${surveyId}`]);
+  }
+
 }
