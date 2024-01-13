@@ -25,7 +25,7 @@ export class SurveyInfoComponent implements OnInit {
   ngOnInit(): void {
     this.authService.user.subscribe(user =>
     {
-      this.isOwnedByLoggedInUser = user.username === this.surveyInfo.owner
+      this.isOwnedByLoggedInUser = user && user.username === this.surveyInfo.owner
     });
   }
 

@@ -4,6 +4,7 @@ import {SurveyInfo} from "../../model/SurveyInfo";
 import {SurveyService} from "../../service/survey.service";
 import {AuthService} from "../../service/auth.service";
 import {tap} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-surveys-view',
@@ -18,7 +19,8 @@ export class SurveysViewComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private surveyService: SurveyService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private router: Router) { }
 
   ngOnInit(): void {
     if (this.displayAll) {
@@ -58,6 +60,10 @@ export class SurveysViewComponent implements OnInit, AfterViewInit {
           data => this.surveyInfos = data['content']
         );
       }
+    }
+
+    goToSurvey(surveyId: number) {
+      this.router.navigate([`/survey/${surveyId}`]);
     }
 
 }

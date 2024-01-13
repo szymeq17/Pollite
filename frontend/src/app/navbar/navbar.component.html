@@ -57,7 +57,7 @@
       <ng-template class="d-flex align-items-center user-controls" #notLoggedIn>
         <div class="username">
           <mat-icon [ngStyle]="{'color':'#D00224'}">person</mat-icon>
-          <div>
+          <div *ngIf="user">
             <a class="username" href="/users/{{user.username}}">{{ user.username }}</a>
           </div>
         </div>

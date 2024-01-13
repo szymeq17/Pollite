@@ -1,6 +1,6 @@
 <div class="container">
-  <div class="surveys-container">
-    <app-survey-info *ngFor="let surveyInfo of surveyInfos" [surveyInfo]="surveyInfo"></app-survey-info>
+  <div *ngIf="surveyInfos" class="surveys-container">
+    <app-survey-info (click)="goToSurvey(surveyInfo.surveyId)" *ngFor="let surveyInfo of surveyInfos" [surveyInfo]="surveyInfo"></app-survey-info>
   </div>
   <div class="pagination">
     <mat-paginator [length]="surveysTotal" [pageSize]="5" [pageSizeOptions]="[5, 10]"></mat-paginator>

@@ -1,0 +1,22 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+service: frontend
+handlers:
+  - url: /(.*\.(gif|png|jpg|css|js)(|\.map))$
+    static_files: dist/pollite/\1
+    upload: dist/pollite/(.*)(|\.map)
+
+  - url: /(.*)
+    static_files: dist/pollite/index.html
+    upload: dist/pollite/index.html
+skip_files:
+  - e2e/
+  - node_modules/
+  - src/
+  - coverage
+  - ^(.*/)?\..*$
+  - ^(.*/)?.*\.json$
+  - ^(.*/)?.*\.md$
+  - ^(.*/)?.*\.yaml$
+  - ^LICENSE
