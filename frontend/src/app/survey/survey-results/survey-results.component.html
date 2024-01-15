@@ -20,7 +20,9 @@
                 </div>
               </div>
               <div class="answers-results-container">
-                <div *ngFor="let answerResult of questionResult.answersResults" class="answer-result">
+                <div (click)="addOrRemoveFromFilters(questionResult.questionId, answerResult.answerId)"
+                     *ngFor="let answerResult of questionResult.answersResults"
+                     [ngClass]="answerResult.selected ? 'answer-result selected' : 'answer-result'">
                   <div class="answer-text">
                     {{ answerResult.answerText }}
                   </div>
@@ -49,7 +51,7 @@
                 </button>
               </div>
               <div *ngFor="let filter of filtersForm.controls; let filterIndex=index" [formGroupName]="filterIndex" class="filter">
-                <mat-form-field class="filter-select" appearance="fill">
+                <mat-form-field class="filter-select" appearance="outline">
                   <mat-label>Question</mat-label>
                   <select formControlName="questionId" matNativeControl required>
                     <option *ngFor="let question of survey.questions" [value]="question.id">
@@ -57,7 +59,7 @@
                     </option>
                   </select>
                 </mat-form-field>
-                <mat-form-field class="filter-select" appearance="fill">
+                <mat-form-field class="filter-select" appearance="outline">
                   <mat-label>Answer</mat-label>
                   <select formControlName="answerId" matNativeControl required>
                     <option *ngFor="let answer of getAnswersForSelectedQuestion(filterIndex)" [value]="answer.id">

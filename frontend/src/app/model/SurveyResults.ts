@@ -14,4 +14,5 @@ export interface SurveyQuestionAnswerResults {
   answerText: string,
   total: number
   percentage: number
+  selected: boolean;
 }

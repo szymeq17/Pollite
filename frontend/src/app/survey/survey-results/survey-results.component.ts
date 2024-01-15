@@ -40,6 +40,39 @@ export class SurveyResultsComponent implements OnInit {
     return this.form.get('filters') as FormArray;
   }
 
+  addOrRemoveFromFilters(questionId: number, answerId: number) {
+    this.toggleAnswer(questionId, answerId);
+    if (this.isFilterApplied(questionId, answerId)) {
+      this.removeFilterOnClick(questionId, answerId);
+      return;
+    }
+
+    let filter = this.fb.group({
+      questionId: questionId,
+      answerId: answerId
+    });
+
+    this.filtersForm.push(filter);
+
+  }
+
+  private removeFilterOnClick(questionId: number, answerId: number) {
+    console.log(this.filtersForm.value)
+    let idx = this.filtersForm.value.findIndex((filter: { questionId: number; answerId: number; }) => {
+      return filter.questionId == questionId && filter.answerId == answerId;
+    });
+
+    this.removeFilter(idx);
+  }
+
+  private isFilterApplied(questionId: number, answerId: number) {
+    let filters = this.filtersForm.value
+    let length = filters.filter((value: { questionId: number; answerId: number; }) =>
+      value.questionId == questionId && value.answerId == answerId).length;
+
+    return length > 0;
+  }
+
   addFilter(): void {
     this.filtersForm.push(this.newFilter());
   }
@@ -90,6 +123,15 @@ export class SurveyResultsComponent implements OnInit {
         answerId: filter.answerId
       } as CompletedSurveyFilter
     });
+  }
+
+  private toggleAnswer(questionId: number, answerId: number) {
+    const results = this.surveyResults.questionsResults;
+    const questionIndex = results.findIndex(result => result.questionId == questionId);
+    const answerIndex = results[questionIndex].answersResults
+      .findIndex(answerResult => answerResult.answerId == answerId);
+    const answerResult = results[questionIndex].answersResults[answerIndex];
+    answerResult.selected = !answerResult.selected;
   }
 
 }
