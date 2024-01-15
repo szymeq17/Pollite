@@ -48,6 +48,7 @@
 
 .question-votes-total {
   display: flex;
+  width: 4rem;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -90,11 +91,12 @@
 
 .answer-summary {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.7rem;
 }
 
 .answer-votes-total {
   display: flex;
+  min-width: 4rem ;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -117,6 +119,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 4rem;
   background-color: $pollite-primary-color;
   color: white;
   border-radius: 5px;
