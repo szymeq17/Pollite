@@ -79,6 +79,7 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
   border-radius: 10px;
   padding: 10px;
+  cursor: pointer;
 }
 
 .selected {
@@ -143,16 +144,6 @@
   justify-content: space-between;
 }
 
-.add-filter-btn {
-  border: 0;
-  background-color: transparent;
-  padding: 0;
-}
-
-.add-filter-symbol {
-  transform: scale(1.5);
-}
-
 .filters-container {
   display: flex;
   flex-direction: column;
@@ -160,48 +151,24 @@
   border-radius: 10px;
   padding: 15px;
   height: 100%;
+  box-sizing: border-box;
   gap: 0.6rem;
-}
-
-.filter-controls {
-  display: flex;
-  justify-content: space-between;
-}
-
-.apply-btn {
-  border: 0;
-  background-color: $pollite-primary-color;
-  color: white;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
-}
-
-.apply-btn:hover {
-  background-color: darken($pollite-primary-color, 7.5%);
 }
 
 .filter {
   display: flex;
   flex-direction: column;
-  align-items: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 10px;
 }
 
-.remove-filter-btn {
-  background-color: $pollite-primary-color;
-  border-radius: 5px;
-  border: 0;
-  width: 40%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+.filter-question-text {
+  font-weight: bold;
 }
 
-.remove-filter-btn:hover {
-  background-color: darken($pollite-primary-color, 7.5%);
-}
-
-.filter-select {
-  width: 100%;
+.filter-info {
+  color: #9d9c9c;
+  font-size: 1rem;
 }
 

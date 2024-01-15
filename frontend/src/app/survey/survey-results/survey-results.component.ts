@@ -44,20 +44,21 @@ export class SurveyResultsComponent implements OnInit {
     this.toggleAnswer(questionId, answerId);
     if (this.isFilterApplied(questionId, answerId)) {
       this.removeFilterOnClick(questionId, answerId);
-      return;
+      this.toastr.success("Filter removed!");
+    } else {
+      let filter = this.fb.group({
+        questionId: questionId,
+        answerId: answerId
+      });
+
+      this.filtersForm.push(filter);
+      this.toastr.success("Filter applied!");
     }
 
-    let filter = this.fb.group({
-      questionId: questionId,
-      answerId: answerId
-    });
-
-    this.filtersForm.push(filter);
-
+    this.applyFilters();
   }
 
   private removeFilterOnClick(questionId: number, answerId: number) {
-    console.log(this.filtersForm.value)
     let idx = this.filtersForm.value.findIndex((filter: { questionId: number; answerId: number; }) => {
       return filter.questionId == questionId && filter.answerId == answerId;
     });
@@ -77,11 +78,11 @@ export class SurveyResultsComponent implements OnInit {
     this.filtersForm.push(this.newFilter());
   }
 
-  removeFilter(filterIndex: number): void {
+  private removeFilter(filterIndex: number): void {
     this.filtersForm.removeAt(filterIndex)
   }
 
-  applyFilters() {
+  private applyFilters() {
     if (this.form.invalid) {
       return;
     }
@@ -92,12 +93,27 @@ export class SurveyResultsComponent implements OnInit {
     const filters = this.buildFiltersFromForm();
     this.surveyService.getSurveyResults(surveyId, filters).subscribe(
       results => {
-        this.toastr.info("Filters applied!");
+        this.fixAnswers(results);
         this.surveyResults = results;
       },
       _ => {
-        this.toastr.error("Error occured while applying filters!");
+        this.toastr.error("Error occured while applying filter!");
       });
+  }
+
+  getQuestionAndAnswerFromFilter(filterIndex: number) {
+    const questionId = +this.filtersForm.at(filterIndex).get('questionId')?.value;
+    const answerId = +this.filtersForm.at(filterIndex).get('answerId')?.value;
+    const question = this.survey.questions.find(question => question.id === questionId);
+    // @ts-ignore
+    const answer = question.answers.find(answer => answer.id == answerId);
+
+    return {
+      // @ts-ignore
+      questionText: question.text,
+      // @ts-ignore
+      answerText: answer.text
+    }
   }
 
   getAnswersForSelectedQuestion(filterIndex: number): SurveyQuestionAnswer[] {
@@ -132,6 +148,19 @@ export class SurveyResultsComponent implements OnInit {
       .findIndex(answerResult => answerResult.answerId == answerId);
     const answerResult = results[questionIndex].answersResults[answerIndex];
     answerResult.selected = !answerResult.selected;
+  }
+
+  private fixAnswers(surveyResults: SurveyResults) {
+    // @ts-ignore
+    this.filtersForm.value.forEach(filter => this.fixAnswer(filter.questionId, filter.answerId, surveyResults));
+    console.log(surveyResults)
+  }
+
+  private fixAnswer(questionId: number, answerId: number, surveyResults: SurveyResults) {
+    const questionResult = surveyResults.questionsResults
+      .find(questionResult => questionResult.questionId == questionId);
+    // @ts-ignore
+    questionResult.answersResults.find(answerResult => answerResult.answerId == answerId).selected = true;
   }
 
 }
