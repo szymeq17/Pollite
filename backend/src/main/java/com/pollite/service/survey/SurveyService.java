@@ -8,6 +8,7 @@ import com.pollite.exception.UserDoesNotExistException;
 import com.pollite.exception.UserNotAuthorizedException;
 import com.pollite.model.survey.Survey;
 import com.pollite.model.survey.SurveyConfiguration;
+import com.pollite.repository.CompletedSurveyRepository;
 import com.pollite.repository.SurveyRepository;
 import com.pollite.service.poll.UserService;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.time.Clock;
 import java.util.Optional;
@@ -26,6 +28,7 @@ public class SurveyService {
     private final UserService userService;
 
     private final SurveyRepository surveyRepository;
+    private final CompletedSurveyRepository completedSurveyRepository;
     private final SurveyMapper surveyMapper;
 
 
@@ -44,6 +47,7 @@ public class SurveyService {
         return createdSurvey.getId();
     }
 
+    @Transactional
     public void deleteSurvey(Long surveyId, Principal principal) {
         var username = principal.getName();
         var survey = surveyRepository.findById(surveyId)
@@ -53,6 +57,7 @@ public class SurveyService {
             throw new UserNotAuthorizedException(username);
         }
 
+        completedSurveyRepository.deleteAllBySurveyId(surveyId);
         surveyRepository.deleteById(surveyId);
     }
 

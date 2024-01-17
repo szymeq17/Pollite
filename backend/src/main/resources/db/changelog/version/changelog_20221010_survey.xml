@@ -109,7 +109,6 @@
             </column>
             <column name="question_id" type="BIGINT"/>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="question_id" baseTableName="completed_question" constraintName="FK_COMPLETED_QUESTION_ON_QUESTION" referencedColumnNames="id" referencedTableName="survey_question"/>
 
         <createTable tableName="completed_survey">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -117,7 +116,6 @@
             </column>
             <column name="survey_id" type="BIGINT"/>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="survey_id" baseTableName="completed_survey" constraintName="FK_COMPLETED_SURVEY_ON_SURVEY" referencedColumnNames="id" referencedTableName="survey"/>
 
         <createTable tableName="completed_survey_completed_questions">
             <column name="completed_survey_id" type="BIGINT">
@@ -140,7 +138,6 @@
             </column>
         </createTable>
         <addForeignKeyConstraint baseColumnNames="completed_question_id" baseTableName="completed_question_answers" constraintName="fk_comqueans_on_completed_question" referencedColumnNames="id" referencedTableName="completed_question"/>
-        <addForeignKeyConstraint baseColumnNames="answers_id" baseTableName="completed_question_answers" constraintName="fk_comqueans_on_survey_question_answer" referencedColumnNames="id" referencedTableName="survey_question_answer"/>
 
         <createTable tableName="survey_question_exclusion">
             <column autoIncrement="true" name="id" type="BIGINT">

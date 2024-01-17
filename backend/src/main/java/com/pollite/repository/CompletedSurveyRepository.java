@@ -24,4 +24,6 @@ public interface CompletedSurveyRepository extends JpaRepository<CompletedSurvey
     List<SurveyResultsProjection> countAnswers(Long surveyId);
 
     List<CompletedSurvey> findAllBySurveyId(Long surveyId);
+
+    void deleteAllBySurveyId(Long surveyId);
 }

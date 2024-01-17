@@ -33,6 +33,6 @@ public class CompletedQuestion {
     @ManyToOne
     private SurveyQuestion question;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
     private List<SurveyQuestionAnswer> answers;
 }
