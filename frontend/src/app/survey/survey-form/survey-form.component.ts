@@ -109,15 +109,44 @@ export class SurveyFormComponent implements OnInit {
     if (questionIndex > 0) {
       const array = this.questionForms.value;
       const newArray = this.swap(array, questionIndex - 1, questionIndex);
-      this.questionForms.patchValue(newArray);
+      const controls1 = this.questionAnswerForms(questionIndex);
+      const controls1values = [...this.questionAnswerForms(questionIndex).value];
+      const controls2 = this.questionAnswerForms(questionIndex - 1);
+      const controls2values = [...this.questionAnswerForms(questionIndex - 1).value];
+      while (controls1.length) {
+
+        controls1.removeAt(0);
+      }
+      controls2values.forEach(control => controls1.push(this.fb.group(control)))
+      while (controls2.length) {
+        controls2.removeAt(0);
+      }
+      controls1values.forEach(control => controls2.push(this.fb.group(control)))
+
+      this.questionForms.setValue(newArray);
     }
   }
 
   moveQuestionDown(questionIndex: number) {
     const array = this.questionForms.value;
     if (questionIndex < array.length - 1) {
+      const array = this.questionForms.value;
       const newArray = this.swap(array, questionIndex, questionIndex + 1);
-      this.questionForms.patchValue(newArray);
+      const controls1 = this.questionAnswerForms(questionIndex);
+      const controls1values = [...this.questionAnswerForms(questionIndex).value];
+      const controls2 = this.questionAnswerForms(questionIndex + 1);
+      const controls2values = [...this.questionAnswerForms(questionIndex + 1).value];
+      while (controls1.length) {
+
+        controls1.removeAt(0);
+      }
+      controls2values.forEach(control => controls1.push(this.fb.group(control)))
+      while (controls2.length) {
+        controls2.removeAt(0);
+      }
+      controls1values.forEach(control => controls2.push(this.fb.group(control)))
+
+      this.questionForms.setValue(newArray);
     }
   }
 
