@@ -5,6 +5,8 @@ import {PollResults} from "../../model/Poll";
 import {MatDialog} from "@angular/material/dialog";
 import {DeleteSurveyDialogComponent} from "../../survey/delete-survey-dialog/delete-survey-dialog.component";
 import {DeletePollDialogComponent} from "../delete-poll-dialog/delete-poll-dialog.component";
+import {Clipboard} from "@angular/cdk/clipboard";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-poll-info',
@@ -18,7 +20,9 @@ export class PollInfoComponent implements OnInit {
   pollResults: PollResults | undefined;
 
   constructor(private pollService: PollService,
-              private deletePollDialog: MatDialog) { }
+              private deletePollDialog: MatDialog,
+              private clipboard: Clipboard,
+              private toastr: ToastrService) { }
 
   ngOnInit(): void {
   }
@@ -59,6 +63,11 @@ export class PollInfoComponent implements OnInit {
         );
       }
     });
+  }
+
+  copyPollUrlToClipboard() {
+    this.clipboard.copy(window.location.host + `/polls/${this.pollInfo.id}`);
+    this.toastr.success("Copied URL to clipboard");
   }
 
 }

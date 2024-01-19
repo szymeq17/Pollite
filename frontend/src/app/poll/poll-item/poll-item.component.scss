@@ -60,3 +60,14 @@
   border-radius: 10px;
   margin-top: 10px;
 }
+
+.copy-btn {
+  cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.copy-btn:hover {
+  color: $pollite-primary-color;
+}

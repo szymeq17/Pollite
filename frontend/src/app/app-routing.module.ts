@@ -10,6 +10,7 @@ import {UserProfileComponent} from "./user/user-profile/user-profile.component";
 import {PollFormComponent} from "./poll/poll-form/poll-form.component";
 import {RegisterComponent} from "./auth/register/register.component";
 import {MainComponent} from "./main/main.component";
+import {PollItemComponent} from "./poll/poll-item/poll-item.component";
 
 const routes: Routes = [
   { path: '', component: MainComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'polls', component: PollsComponent },
   { path: 'poll', component: PollFormComponent, canActivate: [AuthGuard]},
+  { path: 'polls/:pollId', component: PollItemComponent },
   { path: 'users/:username', component: UserProfileComponent },
   { path: 'survey', component: SurveyFormComponent, canActivate: [AuthGuard] },
   { path: 'survey/:surveyId', component: CompleteSurveyFormComponent},

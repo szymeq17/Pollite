@@ -25,6 +25,7 @@
         Vote
       </button>
     </div>
+    <mat-icon (click)="copyPollUrlToClipboard()" class="copy-btn">content_copy</mat-icon>
   </div>
   <div class="mt-3" id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
     <div *ngIf="pollResults" class="results-container">

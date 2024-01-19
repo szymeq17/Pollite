@@ -1,8 +1,8 @@
 <div class="container">
   <div class="info-container">
-    <div class="poll-text">
+    <a href="/polls/{{pollInfo.id}}" class="poll-text">
       {{pollInfo.text}}
-    </div>
+    </a>
   </div>
 
   <button
@@ -13,6 +13,10 @@
     aria-controls="collapseExample"
   >
     {{ showResults ? "Hide" : "Show results"}}
+  </button>
+
+  <button (click)="copyPollUrlToClipboard()" class="copy-btn">
+    Copy URL
   </button>
 
   <button

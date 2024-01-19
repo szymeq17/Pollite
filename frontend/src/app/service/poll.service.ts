@@ -18,6 +18,10 @@ export class PollService {
     return this.http.get(this.POLL_API_PATH, {'params': params});
   }
 
+  public getPoll(pollId: number): Observable<Poll> {
+    return this.http.get<Poll>(`${this.POLL_API_PATH}/${pollId}`);
+  }
+
   public createPoll(poll: Poll) {
     return this.http.post(this.POLL_API_PATH, poll);
   }
