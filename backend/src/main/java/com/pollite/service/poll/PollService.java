@@ -150,6 +150,10 @@ public class PollService {
         var pollStartDate = poll.getStartDateTime();
         var pollEndDate = poll.getEndDateTime();
 
+        if (pollEndDate != null) {
+            pollEndDate = pollEndDate.plusDays(1).minusSeconds(1);
+        }
+
         var isAfterStartDate = pollStartDate == null || now.compareTo(pollStartDate) >= 0;
         var isBeforeEndDate = pollEndDate == null || now.compareTo(pollEndDate) <= 0;
 
