@@ -31,3 +31,11 @@
   cursor: pointer;
   color: #7b7b7b;
 }
+
+.copy-btn {
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  color: $pollite-primary-color;
+}

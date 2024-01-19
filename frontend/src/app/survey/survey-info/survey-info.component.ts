@@ -5,6 +5,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {DeleteSurveyDialogComponent} from "../delete-survey-dialog/delete-survey-dialog.component";
 import {SurveyService} from "../../service/survey.service";
 import {AuthService} from "../../service/auth.service";
+import {Clipboard} from "@angular/cdk/clipboard";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-survey-info',
@@ -19,7 +21,9 @@ export class SurveyInfoComponent implements OnInit {
   constructor(private router: Router,
               private authService: AuthService,
               private deleteSurveyDialog: MatDialog,
-              private surveyService: SurveyService) {
+              private surveyService: SurveyService,
+              private clipboard: Clipboard,
+              private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -27,6 +31,11 @@ export class SurveyInfoComponent implements OnInit {
     {
       this.isOwnedByLoggedInUser = user && user.username === this.surveyInfo.owner
     });
+  }
+
+  copySurveyUrlToClipboard() {
+    this.clipboard.copy(window.location.host + `/survey/${this.surveyInfo.surveyId}`);
+    this.toastr.success("Copied URL to clipboard");
   }
 
   editSurvey() {

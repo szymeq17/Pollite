@@ -7,6 +7,7 @@ import {MatCheckboxChange} from "@angular/material/checkbox";
 import {MatRadioChange} from "@angular/material/radio";
 import {CompletedSurvey, CompletedSurveyQuestion} from "../../model/CompletedSurvey";
 import {ToastrService} from "ngx-toastr";
+import {Clipboard} from "@angular/cdk/clipboard";
 
 @Component({
   selector: 'app-complete-survey-form',
@@ -19,7 +20,8 @@ export class CompleteSurveyFormComponent implements OnInit {
               private route: ActivatedRoute,
               private surveyService: SurveyService,
               private router: Router,
-              private toastr: ToastrService) { }
+              private toastr: ToastrService,
+              private clipboard: Clipboard) { }
   survey: Survey;
   questionsToAnswer: SurveyQuestion[];
   excludedQuestionsOrders: number[] = [];
@@ -38,6 +40,11 @@ export class CompleteSurveyFormComponent implements OnInit {
         })
       });
     });
+  }
+
+  copySurveyUrlToClipboard() {
+    this.clipboard.copy(window.location.href);
+    this.toastr.success("Copied URL to clipboard");
   }
 
   get completedQuestionForms(): FormArray {

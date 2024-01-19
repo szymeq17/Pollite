@@ -2,6 +2,7 @@
   <form [formGroup]="form" class="form" (ngSubmit)="onSubmit()">
     <mat-card>
       <mat-card-header>
+        <mat-icon (click)="copySurveyUrlToClipboard()" class="copy-btn">content_copy</mat-icon>
         <mat-card-title>Survey by {{survey.ownerUsername}}</mat-card-title>
         <mat-card-subtitle>{{survey.description}}</mat-card-subtitle>
       </mat-card-header>

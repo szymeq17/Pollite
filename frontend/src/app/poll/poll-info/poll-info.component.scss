@@ -105,11 +105,9 @@
 }
 
 .copy-btn {
-  width: 30%;
-  color: white;
-  font-weight: bold;
-  background-color: $pollite-primary-color;
-  border-radius: 10px;
-  border: 0;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  color: $pollite-primary-color;
 }

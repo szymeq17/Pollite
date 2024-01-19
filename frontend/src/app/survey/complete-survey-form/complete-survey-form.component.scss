@@ -57,3 +57,14 @@
   flex-direction: column;
   gap: 0.3rem;
 }
+
+.copy-btn {
+  cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.copy-btn:hover {
+  color: $pollite-primary-color;
+}

@@ -15,10 +15,6 @@
     {{ showResults ? "Hide" : "Show results"}}
   </button>
 
-  <button (click)="copyPollUrlToClipboard()" class="copy-btn">
-    Copy URL
-  </button>
-
   <button
     class="delete-btn"
     type="button"
@@ -26,6 +22,8 @@
   >
     Delete
   </button>
+
+  <mat-icon (click)="copyPollUrlToClipboard()" class="copy-btn">content_copy</mat-icon>
 
   <div class="result-info-container" id="collapseExample" mdbCollapse #basicCollapse="mdbCollapse">
     <div *ngIf="pollResults" class="results-container">
