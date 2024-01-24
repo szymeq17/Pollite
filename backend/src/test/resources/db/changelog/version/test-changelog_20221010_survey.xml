@@ -1,0 +1,163 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="5" author="Szymon Rysz">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <not>
+                    <tableExists tableName="survey_configuration"/>
+                </not>
+                <not>
+                    <tableExists tableName="survey"/>
+                </not>
+                <not>
+                    <tableExists tableName="survey_question"/>
+                </not>
+                <not>
+                    <tableExists tableName="survey_question_answer"/>
+                </not>
+                <not>
+                    <tableExists tableName="survey_question_answers"/>
+                </not>
+                <not>
+                    <tableExists tableName="survey_questions"/>
+                </not>
+                <not>
+                    <tableExists tableName="completed_question"/>
+                </not>
+                <not>
+                    <tableExists tableName="completed_survey_completed_questions"/>
+                </not>
+                <not>
+                    <tableExists tableName="completed_question_answers"/>
+                </not>
+                <not>
+                    <tableExists tableName="survey_question_exclusion"/>
+                </not>
+                <not>
+                    <tableExists tableName="survey_configuration_exclusions"/>
+                </not>
+            </and>
+        </preConditions>
+        <createTable tableName="survey_configuration">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_survey_configuration"/>
+            </column>
+            <column name="is_active" type="BOOLEAN"/>
+            <column name="start_date" type="DATETIME"/>
+            <column name="end_date" type="DATETIME"/>
+        </createTable>
+
+        <createTable tableName="survey">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_survey"/>
+            </column>
+            <column name="fk_owner" type="BIGINT"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="configuration_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="configuration_id" baseTableName="survey" constraintName="FK_SURVEY_ON_CONFIGURATION" referencedColumnNames="id" referencedTableName="survey_configuration"/>
+        <addForeignKeyConstraint baseColumnNames="fk_owner" baseTableName="survey" constraintName="FK_SURVEY_ON_FK_OWNER" referencedColumnNames="id" referencedTableName="users"/>
+
+        <createTable tableName="survey_question">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_survey_question"/>
+            </column>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="text" type="VARCHAR(255)"/>
+            <column name="question_order" type="INT"/>
+        </createTable>
+
+        <createTable tableName="survey_question_answer">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_survey_question_answer"/>
+            </column>
+            <column name="text" type="VARCHAR(255)"/>
+            <column name="answer_order" type="INT"/>
+        </createTable>
+
+        <createTable tableName="survey_question_answers">
+            <column name="survey_question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answers_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="answers_id" constraintName="uc_survey_question_answers_answers" tableName="survey_question_answers"/>
+        <addForeignKeyConstraint baseColumnNames="survey_question_id" baseTableName="survey_question_answers" constraintName="fk_surqueans_on_survey_question" referencedColumnNames="id" referencedTableName="survey_question"/>
+        <addForeignKeyConstraint baseColumnNames="answers_id" baseTableName="survey_question_answers" constraintName="fk_surqueans_on_survey_question_answer" referencedColumnNames="id" referencedTableName="survey_question_answer"/>
+
+
+        <createTable tableName="survey_questions">
+            <column name="survey_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="questions_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="questions_id" constraintName="uc_survey_questions_questions" tableName="survey_questions"/>
+        <addForeignKeyConstraint baseColumnNames="survey_id" baseTableName="survey_questions" constraintName="fk_surque_on_survey" referencedColumnNames="id" referencedTableName="survey"/>
+        <addForeignKeyConstraint baseColumnNames="questions_id" baseTableName="survey_questions" constraintName="fk_surque_on_survey_question" referencedColumnNames="id" referencedTableName="survey_question"/>
+
+        <createTable tableName="completed_question">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_completed_question"/>
+            </column>
+            <column name="question_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="completed_survey">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_completed_survey"/>
+            </column>
+            <column name="survey_id" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="completed_survey_completed_questions">
+            <column name="completed_survey_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="completed_questions_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="completed_questions_id" constraintName="uc_completed_survey_completed_questions_completedquestions" tableName="completed_survey_completed_questions"/>
+        <addForeignKeyConstraint baseColumnNames="completed_questions_id" baseTableName="completed_survey_completed_questions" constraintName="fk_comsurcomque_on_completed_question" referencedColumnNames="id" referencedTableName="completed_question"/>
+        <addForeignKeyConstraint baseColumnNames="completed_survey_id" baseTableName="completed_survey_completed_questions" constraintName="fk_comsurcomque_on_completed_survey" referencedColumnNames="id" referencedTableName="completed_survey"/>
+
+        <createTable tableName="completed_question_answers">
+            <column name="completed_question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answers_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="completed_question_id" baseTableName="completed_question_answers" constraintName="fk_comqueans_on_completed_question" referencedColumnNames="id" referencedTableName="completed_question"/>
+
+        <createTable tableName="survey_question_exclusion">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_survey_question_exclusion"/>
+            </column>
+            <column name="question_order" type="INT"/>
+            <column name="answer_order" type="INT"/>
+            <column name="excluded_question_order" type="INT"/>
+        </createTable>
+
+        <createTable tableName="survey_configuration_exclusions">
+            <column name="survey_configuration_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="exclusions_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint columnNames="exclusions_id" constraintName="uc_survey_configuration_exclusions_exclusions" tableName="survey_configuration_exclusions"/>
+        <addForeignKeyConstraint baseColumnNames="survey_configuration_id" baseTableName="survey_configuration_exclusions" constraintName="fk_surconexc_on_survey_configuration" referencedColumnNames="id" referencedTableName="survey_configuration"/>
+        <addForeignKeyConstraint baseColumnNames="exclusions_id" baseTableName="survey_configuration_exclusions" constraintName="fk_surconexc_on_survey_question_exclusion" referencedColumnNames="id" referencedTableName="survey_question_exclusion"/>
+    </changeSet>
+</databaseChangeLog>
