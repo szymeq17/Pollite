@@ -1,4 +1,4 @@
-package com.pollite.service.poll;
+package com.pollite.service.user;
 
 import com.pollite.dto.UserDto;
 import com.pollite.exception.UserAlreadyExistsException;

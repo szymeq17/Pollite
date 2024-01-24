@@ -10,7 +10,7 @@ import com.pollite.model.survey.Survey;
 import com.pollite.model.survey.SurveyConfiguration;
 import com.pollite.repository.CompletedSurveyRepository;
 import com.pollite.repository.SurveyRepository;
-import com.pollite.service.poll.UserService;
+import com.pollite.service.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

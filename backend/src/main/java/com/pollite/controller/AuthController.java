@@ -2,7 +2,7 @@ package com.pollite.controller;
 
 import com.pollite.dto.UserDto;
 import com.pollite.exception.UserAlreadyExistsException;
-import com.pollite.service.poll.UserService;
+import com.pollite.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

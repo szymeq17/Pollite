@@ -14,6 +14,7 @@ import com.pollite.model.Poll;
 import com.pollite.model.PollAnswer;
 import com.pollite.repository.PollAnswerRepository;
 import com.pollite.repository.PollRepository;
+import com.pollite.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
