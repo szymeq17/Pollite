@@ -6,7 +6,7 @@ import {Poll, PollResults} from "../model/Poll";
 
 @Injectable({providedIn: 'root'})
 export class PollService {
-  private POLL_API_PATH: string = Constants.API_ENDPOINT + 'poll';
+  private POLL_API_PATH: string = Constants.API_ENDPOINT + 'polls';
 
   constructor(private http: HttpClient) {}
 

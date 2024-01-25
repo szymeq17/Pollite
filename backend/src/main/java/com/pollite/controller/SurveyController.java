@@ -22,7 +22,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/survey")
+@RequestMapping("api/surveys")
 @RequiredArgsConstructor
 @CrossOrigin
 public class SurveyController {

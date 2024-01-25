@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("api/poll")
+@RequestMapping("api/polls")
 @RequiredArgsConstructor
 @CrossOrigin
 public class PollControler {

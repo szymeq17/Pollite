@@ -8,7 +8,7 @@ import {SurveyResults} from "../model/SurveyResults";
 
 @Injectable({providedIn: 'root'})
 export class SurveyService {
-  private SURVEY_API_PATH: string = Constants.API_ENDPOINT + 'survey';
+  private SURVEY_API_PATH: string = Constants.API_ENDPOINT + 'surveys';
 
   constructor(private http: HttpClient) {}
 
