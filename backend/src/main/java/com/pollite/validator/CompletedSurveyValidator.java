@@ -123,7 +123,7 @@ public class CompletedSurveyValidator {
 
     private boolean isSurveyActive(Survey survey) {
         var startDate = survey.getConfiguration().getStartDate();
-        var endDate = survey.getConfiguration().getEndDate().plusDays(1).minusSeconds(1);
+        var endDate = survey.getConfiguration().getEndDate();
         var now = OffsetDateTime.now(clok);
         var isActive = survey.getConfiguration().getIsActive();
 
@@ -135,6 +135,6 @@ public class CompletedSurveyValidator {
     }
 
     private boolean surveyHasEnded(OffsetDateTime endDate, OffsetDateTime now) {
-        return endDate != null && now.isAfter(endDate);
+        return endDate != null && now.isAfter(endDate.plusDays(1).minusSeconds(1));
     }
 }
