@@ -15,6 +15,12 @@ services:
       - db-pollite
     networks:
       - pollite-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 3
+        window: 60s
 
   frontend:
     image: pollite-frontend

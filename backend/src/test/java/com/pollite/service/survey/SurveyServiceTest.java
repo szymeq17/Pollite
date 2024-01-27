@@ -6,6 +6,7 @@ import com.pollite.model.survey.Survey;
 import com.pollite.exception.UserNotAuthorizedException;
 import com.pollite.model.auth.User;
 import com.pollite.model.survey.SurveyConfiguration;
+import com.pollite.repository.CompletedSurveyRepository;
 import com.pollite.repository.SurveyRepository;
 import com.pollite.service.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,9 @@ public class SurveyServiceTest {
 
     @Mock
     private SurveyRepository surveyRepository;
+
+    @Mock
+    private CompletedSurveyRepository completedSurveyRepository;
 
     @Mock
     private SurveyMapper surveyMapper;
@@ -84,6 +88,7 @@ public class SurveyServiceTest {
         sut.deleteSurvey(SURVEY_ID, principal);
 
         //then
+        verify(completedSurveyRepository).deleteAllBySurveyId(SURVEY_ID);
         verify(surveyRepository).deleteById(SURVEY_ID);
     }
 

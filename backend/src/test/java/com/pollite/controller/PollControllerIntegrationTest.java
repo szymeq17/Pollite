@@ -1,18 +1,14 @@
 package com.pollite.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pollite.PolliteTestApplication;
 import com.pollite.dto.PollAnswerDto;
 import com.pollite.dto.PollDto;
-import com.pollite.model.Poll;
-import com.pollite.model.PollAnswer;
 import com.pollite.model.auth.User;
 import com.pollite.repository.PollAnswerRepository;
 import com.pollite.repository.PollRepository;
 import com.pollite.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -86,7 +81,7 @@ public class PollControllerIntegrationTest {
                 .build();
 
         //when
-        var result = mockMvc.perform(post("/api/poll/")
+        var result = mockMvc.perform(post("/api/polls/")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(pollDto)));
 
