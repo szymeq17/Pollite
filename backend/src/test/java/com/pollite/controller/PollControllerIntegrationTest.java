@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pollite.PolliteTestApplication;
 import com.pollite.dto.PollAnswerDto;
 import com.pollite.dto.PollDto;
+import com.pollite.model.Poll;
+import com.pollite.model.PollAnswer;
 import com.pollite.model.auth.User;
 import com.pollite.repository.PollAnswerRepository;
 import com.pollite.repository.PollRepository;
@@ -14,7 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,15 +26,18 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @SpringBootTest(classes = {PolliteTestApplication.class})
+@EnableAutoConfiguration
 public class PollControllerIntegrationTest {
 
     private static final String USERNAME = "user";
@@ -58,7 +65,6 @@ public class PollControllerIntegrationTest {
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
-        addUser();
     }
 
     @AfterEach
@@ -71,6 +77,7 @@ public class PollControllerIntegrationTest {
     @Transactional
     public void shouldAddPoll() throws Exception {
         //given
+        addUser();
         var pollDto = PollDto.builder()
                 .text("Question")
                 .pollAnswers(List.of(
@@ -82,7 +89,7 @@ public class PollControllerIntegrationTest {
 
         //when
         var result = mockMvc.perform(post("/api/polls/")
-                        .contentType("application/json")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pollDto)));
 
         //then
@@ -106,17 +113,149 @@ public class PollControllerIntegrationTest {
         assertThat(answer3.getVotesTotal()).isEqualTo(0);
     }
 
+    @Test
+    public void shouldGetPolls() throws Exception {
+        //given
+        var user = addUser();
+        var poll1 = createAndSavePoll(user);
+        var poll2 = createAndSavePoll(user);
+
+        //when
+        var result = mockMvc.perform(get("/api/polls/")
+                        .contentType("application/json"));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[0].id").value(poll1.getId()))
+                .andExpect(jsonPath("$.content[1].id").value(poll2.getId()));
+    }
+
+    @Test
+    public void shouldGetPoll() throws Exception {
+        //given
+        var user = addUser();
+        var poll = createAndSavePoll(user);
+
+        //when
+        var result = mockMvc.perform(get("/api/polls/{id}", poll.getId())
+                        .contentType("application/json"));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(poll.getId()))
+                .andExpect(jsonPath("$.ownerUsername").value(poll.getOwner().getUsername()))
+                .andExpect(jsonPath("$.text").value(poll.getText()))
+                .andExpect(jsonPath("$.pollAnswers[0].text").value(poll.getPollAnswers().get(0).getText()))
+                .andExpect(jsonPath("$.pollAnswers[1].text").value(poll.getPollAnswers().get(1).getText()));
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME)
+    public void shouldGetUsersPollInfos() throws Exception {
+        //given
+        var user = addUser();
+        var poll = createAndSavePoll(user);
+
+        //when
+        var result = mockMvc.perform(get("/api/polls/users/{username}", USERNAME)
+                        .contentType("application/json"));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].id").value(poll.getId()))
+                .andExpect(jsonPath("$.content[0].text").value(poll.getText()));
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME)
+    public void shouldDeletePoll() throws Exception {
+        //given
+        var user = addUser();
+        var poll = createAndSavePoll(user);
+
+        //when
+        var result = mockMvc.perform(delete("/api/polls/{pollId}", poll.getId())
+                        .contentType("application/json"));
+
+        //then
+        result.andExpect(status().isOk());
+        assertThat(pollRepository.findById(poll.getId())).isEmpty();
+    }
+
+    @Test
+    @WithMockUser(username = USERNAME)
+    public void shouldGetPollResults() throws Exception {
+        //given
+        var user = addUser();
+        var poll = createAndSavePoll(user);
+
+        //when
+        var result = mockMvc.perform(get("/api/polls/{pollId}/results", poll.getId())
+                .contentType("application/json"));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.votesTotal").value(10))
+                .andExpect(jsonPath("$.results[0].pollAnswerText").value(poll.getPollAnswers().get(0).getText()))
+                .andExpect(jsonPath("$.results[0].votes").value(poll.getPollAnswers().get(0).getVotesTotal()))
+                .andExpect(jsonPath("$.results[0].percentage").value(80))
+                .andExpect(jsonPath("$.results[1].pollAnswerText").value(poll.getPollAnswers().get(1).getText()))
+                .andExpect(jsonPath("$.results[1].votes").value(poll.getPollAnswers().get(1).getVotesTotal()))
+                .andExpect(jsonPath("$.results[1].percentage").value(20));
+
+    }
+
+    @Test
+    public void shouldSaveVoteProperly() throws Exception {
+        //given
+        var user = addUser();
+        var poll = createAndSavePoll(user);
+
+        //when
+        var result = mockMvc.perform(
+                post("/api/polls/{pollId}/vote/{pollAnswerId}",
+                        poll.getId(),
+                        poll.getPollAnswers().get(0).getId())
+                .contentType("application/json"));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.votesTotal").value(11))
+                .andExpect(jsonPath("$.results[0].pollAnswerText").value(poll.getPollAnswers().get(0).getText()))
+                .andExpect(jsonPath("$.results[0].votes").value(poll.getPollAnswers().get(0).getVotesTotal() + 1))
+                .andExpect(jsonPath("$.results[0].percentage").value(BigDecimal.valueOf(81.82)))
+                .andExpect(jsonPath("$.results[1].pollAnswerText").value(poll.getPollAnswers().get(1).getText()))
+                .andExpect(jsonPath("$.results[1].votes").value(poll.getPollAnswers().get(1).getVotesTotal()))
+                .andExpect(jsonPath("$.results[1].percentage").value(BigDecimal.valueOf(18.18)));
+    }
+
     private void cleanDb() {
         pollRepository.deleteAll();
         pollAnswerRepository.deleteAll();
         userRepository.deleteAll();
     }
 
-    private void addUser() {
+    private Poll createAndSavePoll(User user) {
+        var poll = Poll.builder()
+                .text("Question")
+                .pollAnswers(List.of(
+                        PollAnswer.builder().text("Answer 1").votesTotal(8L).build(),
+                        PollAnswer.builder().text("Answer 2").votesTotal(2L).build()
+                ))
+                .owner(user)
+                .build();
+
+        return pollRepository.save(poll);
+    }
+
+
+    private User addUser() {
         var user = User.builder()
                 .username(USERNAME)
                 .password("password")
                 .build();
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }
