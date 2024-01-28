@@ -23,13 +23,12 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/survey/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/survey/submit").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/poll/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/poll/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/surveys/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/surveys/submit").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/polls/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/polls/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
